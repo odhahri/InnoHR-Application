@@ -14,10 +14,13 @@ module com.innovhr.innovhrapp {
     requires java.sql;
     requires java.persistence;
     requires jakarta.persistence;
+    requires jakarta.validation;
     opens com.innovhr.innovhrapp to javafx.fxml;
     exports com.innovhr.innovhrapp.models;
     opens com.innovhr.innovhrapp.models to  org.hibernate.orm.core;
     exports com.innovhr.innovhrapp;
     exports com.innovhr.innovhrapp.controllers;
+    exports com.innovhr.innovhrapp.controllers.adminhr;
     opens com.innovhr.innovhrapp.controllers to javafx.fxml;
+    opens com.innovhr.innovhrapp.controllers.adminhr to javafx.fxml;
 }

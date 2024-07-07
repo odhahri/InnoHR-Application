@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AdminhrSpaceController"
+      prefWidth="600.0" prefHeight="400.0">
+    <!-- Left Menu -->
+    <VBox fx:id="menuContainer" prefWidth="150.0" style="-fx-background-color: #f0f0f0;">
+        <ListView fx:id="menuListView" onMouseClicked="#handleMenuClick" prefHeight="400.0"/>
+    </VBox>
+
+    <!-- Main Container -->
+    <AnchorPane fx:id="mainContainer" style="-fx-background-color: #ffffff;" prefWidth="450.0" />
+</HBox>

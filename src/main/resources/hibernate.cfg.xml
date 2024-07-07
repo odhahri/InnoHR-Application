@@ -40,6 +40,7 @@
         <mapping class="com.innovhr.innovhrapp.models.Document"/>
         <mapping class="com.innovhr.innovhrapp.models.Holiday"/>
         <mapping class="com.innovhr.innovhrapp.models.Repayment"/>
+        <mapping class="com.innovhr.innovhrapp.models.User"/>
 
 
 

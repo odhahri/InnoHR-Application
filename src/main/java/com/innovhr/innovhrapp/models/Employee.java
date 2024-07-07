@@ -14,6 +14,8 @@ public class Employee {
     private String emp_image;
     private String emp_fname;
     private String emp_lname;
+    @Column(unique = true)
+    private String emp_username;
     private String emp_description;
 
     @ManyToOne
@@ -108,6 +110,12 @@ public class Employee {
 
     public void setEmp_lname(String emp_lname) {
         this.emp_lname = emp_lname;
+    }
+    public void setEmp_username(String emp_username) {
+        this.emp_username = emp_username;
+    }
+    public String getEmp_username() {
+        return emp_username;
     }
 
     public String getEmp_description() {

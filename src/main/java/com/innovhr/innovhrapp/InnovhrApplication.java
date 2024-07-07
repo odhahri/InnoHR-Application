@@ -11,9 +11,9 @@ import java.io.IOException;
 public class InnovhrApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(InnovhrApplication.class.getResource("view/welcome-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(InnovhrApplication.class.getResource("view/signin/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
