@@ -8,10 +8,11 @@ public class Manager {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "adminhr_id")
+    @JoinColumn(name = "adminhr_id" , nullable = false)
     private Adminhr adminhr;
 
     @OneToMany(mappedBy = "manager")

@@ -1,6 +1,8 @@
 package com.innovhr.innovhrapp.utils.navigation;
 
 import com.innovhr.innovhrapp.models.User;
+import com.innovhr.innovhrapp.utils.component.FXMLViewLoader;
+import com.innovhr.innovhrapp.utils.constants.ViewPresets;
 import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,9 +20,19 @@ public class UserNavigationHandler {
     }
 
     public void switchAccessLevel(User.AccessLevel newAccessLevel) {
-        sessionManager.setDynamicAccessLevel(newAccessLevel);
+        User.AccessLevel currentLevel = sessionManager.getInstance().getLoggedInUser().getAccessLevel();
+        if (currentLevel == User.AccessLevel.ADMIN) {
+            sessionManager.setDynamicAccessLevel(newAccessLevel);
+        } else if (currentLevel == User.AccessLevel.MANAGER && newAccessLevel != User.AccessLevel.ADMIN) {
+            sessionManager.setDynamicAccessLevel(newAccessLevel);
+        } else if (currentLevel == User.AccessLevel.COLLAB && newAccessLevel == User.AccessLevel.COLLAB) {
+            sessionManager.setDynamicAccessLevel(newAccessLevel);
+        } else {
+            throw new UnsupportedOperationException("Permission denied to switch to the specified access level");
+        }
         System.out.println("Switched to access level: " + newAccessLevel);
     }
+
 
     public void resetAccessLevel() {
         sessionManager.resetDynamicAccessLevel();
@@ -36,27 +48,10 @@ public class UserNavigationHandler {
         }
     }
 
-    public void authorizeAction(String actionName, User.AccessLevel requiredAccessLevel) {
-        User.AccessLevel currentAccessLevel = sessionManager.getDynamicAccessLevel();
-        if (currentAccessLevel == requiredAccessLevel || currentAccessLevel == User.AccessLevel.ADMIN) {
-            System.out.println("Action authorized: " + actionName);
-        } else {
-            throw new UnsupportedOperationException("Unauthorized action: " + actionName);
-        }
-    }
-
-    private void loadFXMLAndShow(String fxmlPath, String windowTitle) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        Parent root = loader.load();
-        Stage stage = new Stage();
-        stage.setTitle(windowTitle);
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
 
     public void navigateToAdminSpace() {
         try {
-            loadFXMLAndShow("/com/innovhr/innovhrapp/view/adminhr/adminhr-space.fxml", "Admin Space");
+            FXMLViewLoader.loadScene("Admin Space",ViewPresets.AdminFxmlViews.fxml_admin_space_path );
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load Admin Space", e);
@@ -65,7 +60,7 @@ public class UserNavigationHandler {
 
     public void navigateToManagerSpace() {
         try {
-            loadFXMLAndShow("/path/to/ManagerSpace.fxml", "Manager Space");
+            FXMLViewLoader.loadScene("Manager Space",ViewPresets.ManagerFxmlViews.fxml_manager_space_path );
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load Manager Space", e);
@@ -74,7 +69,7 @@ public class UserNavigationHandler {
 
     public void navigateToCollabSpace() {
         try {
-            loadFXMLAndShow("/path/to/CollabSpace.fxml", "Collaborator Space");
+            FXMLViewLoader.loadScene("Collaborator Space",ViewPresets.CollabFxmlViews.fxml_collab_space_path );
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to load Collaborator Space", e);

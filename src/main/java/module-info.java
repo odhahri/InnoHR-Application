@@ -23,4 +23,6 @@ module com.innovhr.innovhrapp {
     exports com.innovhr.innovhrapp.controllers.adminhr;
     opens com.innovhr.innovhrapp.controllers to javafx.fxml;
     opens com.innovhr.innovhrapp.controllers.adminhr to javafx.fxml;
+    exports com.innovhr.innovhrapp.controllers.shared;
+    opens com.innovhr.innovhrapp.controllers.shared to javafx.fxml;
 }

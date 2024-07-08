@@ -8,19 +8,22 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int team_id;
+    @Column(nullable = false)
     private String team_label;
+    @Column(nullable = false)
     private String team_description;
+    @Column(nullable = false)
     private int team_employee_nb;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @OneToMany(mappedBy = "team")
     private List<Employee> employees;
 
     @ManyToOne
-    @JoinColumn(name = "teamlead_id")
+    @JoinColumn(name = "teamlead_id", nullable = false)
     private Teamlead teamlead;
 
     // getters and setters

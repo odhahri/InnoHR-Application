@@ -8,6 +8,7 @@ public class Adminhr {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "adminhr")

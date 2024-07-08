@@ -22,6 +22,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccessLevel accessLevel;
+    @Column(unique = true, nullable = false)
+    private int personId;
 
     // Getters and setters
 
@@ -61,6 +63,14 @@ public class User {
         // Implement hashing logic here
         // Example using a simple hashing (not recommended for production)
         return Integer.toHexString(password.hashCode());
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     public enum AccessLevel {

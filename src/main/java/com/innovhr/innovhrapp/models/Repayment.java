@@ -8,8 +8,11 @@ public class Repayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int repayment_id;
+    @Column(nullable = false)
     private String repayment_type;
+    @Column(nullable = false)
     private String repayment_description;
+    @Column(nullable = false)
     private float repayment_amount;
 
     @OneToMany(mappedBy = "repayment")

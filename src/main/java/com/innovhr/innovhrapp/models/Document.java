@@ -11,6 +11,9 @@ public class Document {
     private String doc_label;
     private String doc_type;
 
+    @ManyToMany(mappedBy = "documents")
+    private List<Employee> employees;
+
     @OneToMany(mappedBy = "document")
     private List<Request> requests;
 

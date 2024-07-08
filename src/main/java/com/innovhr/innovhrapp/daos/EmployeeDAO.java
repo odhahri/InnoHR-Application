@@ -1,50 +1,83 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Employee;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class EmployeeDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
-    public void saveEmployee(Employee employee) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(employee);
-        em.getTransaction().commit();
-        em.close();
+    public static void saveEmployee(Employee employee) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.persist(employee); // Using persist instead of save
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public Employee findEmployeeById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Employee employee = em.find(Employee.class, id);
-        em.close();
-        return employee;
+
+    public static Employee findEmployeeById(int id) {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Employee.class, id);
+        }
     }
 
     public List<Employee> findAllEmployees() {
-        EntityManager em = emf.createEntityManager();
-        List<Employee> employees = em.createQuery("from Employee", Employee.class).getResultList();
-        em.close();
-        return employees;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Employee> query = session.createQuery("from Employee", Employee.class);
+            return query.list();
+        }
     }
 
-    public void updateEmployee(Employee employee) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(employee);
-        em.getTransaction().commit();
-        em.close();
+
+    public static void updateEmployee(Employee employee) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(employee); // Using merge instead of update
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public void deleteEmployee(Employee employee) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        employee = em.merge(employee);
-        em.remove(employee);
-        em.getTransaction().commit();
-        em.close();
+
+    public static void deleteEmployee(Employee employee) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.remove(employee); // Using remove instead of delete
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
+
+
+    public static Employee findEmployeeByUsername(String username) {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            String hql = "FROM Employee WHERE emp_username = :username";
+            Query<Employee> query = session.createQuery(hql, Employee.class);
+            query.setParameter("username", username);
+            return query.uniqueResult();
+        }
+    }
+
+
+
 }

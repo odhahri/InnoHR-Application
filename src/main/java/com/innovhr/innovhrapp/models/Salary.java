@@ -7,14 +7,19 @@ public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int salary_id;
+    @Column(nullable = false)
     private String salary_state;
+    @Column(nullable = false)
     private float salary_base;
+    @Column(nullable = false)
     private float salary_net;
+    @Column(nullable = false)
     private float salary_cnss;
+    @Column(nullable = false)
     private float salary_insurance_retenu;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     // getters and setters

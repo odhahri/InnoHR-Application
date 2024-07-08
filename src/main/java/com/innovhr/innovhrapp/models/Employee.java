@@ -8,26 +8,34 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int emp_id;
+    @Column(nullable = false)
     private String emp_phone;
+    @Column(nullable = false)
     private String emp_email;
+    @Column(nullable = false)
     private String emp_address;
-    private String emp_image;
+    @Column(nullable = false)
+    @Lob
+    private byte[] emp_image;
+    @Column(nullable = false)
     private String emp_fname;
+    @Column(nullable = false)
     private String emp_lname;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String emp_username;
+    @Column(nullable = false)
     private String emp_description;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private Manager manager;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @OneToMany(mappedBy = "employee")
@@ -39,6 +47,13 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<Request> requests;
 
+    @ManyToMany
+    @JoinTable(
+            name = "employee_document",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "document_id")
+    )
+    private List<Document> documents;
     @ManyToMany
     @JoinTable(
             name = "employee_training",
@@ -88,11 +103,11 @@ public class Employee {
         this.emp_address = emp_address;
     }
 
-    public String getEmp_image() {
+    public byte[] getEmp_image() {
         return emp_image;
     }
 
-    public void setEmp_image(String emp_image) {
+    public void setEmp_image(byte[] emp_image) {
         this.emp_image = emp_image;
     }
 
@@ -188,5 +203,13 @@ public class Employee {
 
     public void setHolidays(List<Holiday> holidays) {
         this.holidays = holidays;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 }

@@ -8,16 +8,20 @@ public class Training {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int train_id;
+    @Column(nullable = false)
     private String train_label;
+    @Column(nullable = false)
     private String train_description;
+    @Column(nullable = false)
     private int train_chapters;
+    @Column(nullable = false)
     private int train_length;
+    @Column(nullable = false)
     private String train_image;
+    @Column(nullable = false)
     private int train_finished_nb;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+
 
     @ManyToMany(mappedBy = "trainings")
     private List<Employee> employees;
@@ -79,13 +83,6 @@ public class Training {
         this.train_finished_nb = train_finished_nb;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
 
     public List<Employee> getEmployees() {
         return employees;

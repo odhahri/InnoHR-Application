@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserDAO {
 
-    public void saveUser(User user) {
+    public static void saveUser(User user) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Manager;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class ManagerDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
     public void saveManager(Manager manager) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(manager);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(manager);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public Manager findManagerById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Manager manager = em.find(Manager.class, id);
-        em.close();
-        return manager;
+    public static Manager findManagerById(int id) {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Manager.class, id);
+        }
     }
 
-    public List<Manager> findAllManagers() {
-        EntityManager em = emf.createEntityManager();
-        List<Manager> managers = em.createQuery("from Manager", Manager.class).getResultList();
-        em.close();
-        return managers;
+    public static List<Manager> findAllManagers() {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Manager> query = session.createQuery("from Manager", Manager.class);
+            return query.list();
+        }
     }
 
     public void updateManager(Manager manager) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(manager);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(manager);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteManager(Manager manager) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        manager = em.merge(manager);
-        em.remove(manager);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(manager);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

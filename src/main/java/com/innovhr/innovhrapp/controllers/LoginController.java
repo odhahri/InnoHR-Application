@@ -2,6 +2,8 @@ package com.innovhr.innovhrapp.controllers;
 
 import com.innovhr.innovhrapp.daos.UserDAO;
 import com.innovhr.innovhrapp.models.User;
+import com.innovhr.innovhrapp.utils.component.FXMLViewLoader;
+import com.innovhr.innovhrapp.utils.constants.ViewPresets;
 import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
 import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
 import javafx.fxml.FXML;
@@ -10,12 +12,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class LoginController {
 
+
+    public VBox loginBox;
     @FXML
     private TextField usernameField;
 
@@ -57,18 +62,18 @@ public class LoginController {
 
     private void loadMainApp() {
         try {
-            // Load the "Continue As" screen
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/innovhr/innovhrapp/view/shared/continue-as.fxml"));
-            Parent root = loader.load();
-
-            // Set up a new stage for the main application window
-            Stage stage = new Stage();
-            stage.setTitle("Continue As");
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
-
+//            // Load the "Continue As" screen
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/innovhr/innovhrapp/view/shared/continue-as.fxml"));
+//            Parent root = loader.load();
+//
+//            // Set up a new stage for the main application window
+//            Stage stage = new Stage();
+//            stage.setTitle("Continue As");
+//            stage.setScene(new javafx.scene.Scene(root));
+//            stage.show();
+            FXMLViewLoader.loadScene("Continue as", ViewPresets.SharedFXMLViews.fxml_continue_as_path );
             // Close the login window
-            usernameField.getScene().getWindow().hide();
+            FXMLViewLoader.closeScene(loginBox);
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the main application: " + e.getMessage());

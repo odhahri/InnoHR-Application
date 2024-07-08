@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Teamlead;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class TeamleadDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
-    public void saveTeamlead(Teamlead teamlead) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(teamlead);
-        em.getTransaction().commit();
-        em.close();
+    public void saveTeamLead(Teamlead teamLead) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(teamLead);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public Teamlead findTeamleadById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Teamlead teamlead = em.find(Teamlead.class, id);
-        em.close();
-        return teamlead;
+    public Teamlead findTeamLeadById(int id) {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Teamlead.class, id);
+        }
     }
 
-    public List<Teamlead> findAllTeamleads() {
-        EntityManager em = emf.createEntityManager();
-        List<Teamlead> teamleads = em.createQuery("from Teamlead", Teamlead.class).getResultList();
-        em.close();
-        return teamleads;
+    public List<Teamlead> findAllTeamLeads() {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Teamlead> query = session.createQuery("from Teamlead", Teamlead.class);
+            return query.list();
+        }
     }
 
-    public void updateTeamlead(Teamlead teamlead) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(teamlead);
-        em.getTransaction().commit();
-        em.close();
+    public void updateTeamLead(Teamlead teamLead) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(teamLead);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public void deleteTeamlead(Teamlead teamlead) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        teamlead = em.merge(teamlead);
-        em.remove(teamlead);
-        em.getTransaction().commit();
-        em.close();
+    public void deleteTeamLead(Teamlead teamLead) {
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(teamLead);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

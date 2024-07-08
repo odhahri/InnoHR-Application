@@ -1,10 +1,12 @@
-package com.innovhr.innovhrapp.controllers;
+package com.innovhr.innovhrapp.controllers.shared;
 
 import com.innovhr.innovhrapp.models.User;
+import com.innovhr.innovhrapp.utils.component.FXMLViewLoader;
 import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
 import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
 public class ContinueAsController {
@@ -30,6 +32,11 @@ public class ContinueAsController {
         // Get the logged-in user
         User loggedInUser = SessionManager.getInstance().getLoggedInUser();
 
+        // Initialize tooltips
+        adminButton.setTooltip(new Tooltip("Access Admin Features"));
+        managerButton.setTooltip(new Tooltip("Access Manager Features"));
+        collabButton.setTooltip(new Tooltip("Access Collaborator Features"));
+
         // Show the appropriate buttons based on the user's access level
         if (loggedInUser != null) {
             switch (loggedInUser.getAccessLevel()) {
@@ -47,7 +54,7 @@ public class ContinueAsController {
                     break;
                 default:
                     // Handle unknown access levels if necessary
-                    break;
+                    throw new UnsupportedOperationException("Unsupported access level");
             }
         }
     }
@@ -56,6 +63,7 @@ public class ContinueAsController {
     private void handleAdminSelection() {
         navigationHandler.switchAccessLevel(User.AccessLevel.ADMIN);
         navigationHandler.navigateToAdminSpace();
+        FXMLViewLoader.closeScene(roleSelectionBox);
         System.out.println("Navigating to Admin Space...");
     }
 
@@ -63,6 +71,7 @@ public class ContinueAsController {
     private void handleManagerSelection() {
         navigationHandler.switchAccessLevel(User.AccessLevel.MANAGER);
         navigationHandler.navigateToManagerSpace();
+        FXMLViewLoader.closeScene(roleSelectionBox);
         System.out.println("Navigating to Manager Space...");
     }
 
@@ -70,6 +79,7 @@ public class ContinueAsController {
     private void handleCollabSelection() {
         navigationHandler.switchAccessLevel(User.AccessLevel.COLLAB);
         navigationHandler.navigateToCollabSpace();
+        FXMLViewLoader.closeScene(roleSelectionBox);
         System.out.println("Navigating to Collaborator Space...");
     }
 }

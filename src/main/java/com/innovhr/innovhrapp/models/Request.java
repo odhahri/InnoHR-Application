@@ -7,9 +7,13 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int request_id;
+    @Column(nullable = false)
     private String request_type;
+    @Column(nullable = false)
     private String request_description;
+    @Column(nullable = false)
     private String request_label;
+    @Column(nullable = false)
     private String request_state;
 
     @ManyToOne

@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Promotion;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class PromotionDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
     public void savePromotion(Promotion promotion) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(promotion);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(promotion);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public Promotion findPromotionById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Promotion promotion = em.find(Promotion.class, id);
-        em.close();
-        return promotion;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Promotion.class, id);
+        }
     }
 
     public List<Promotion> findAllPromotions() {
-        EntityManager em = emf.createEntityManager();
-        List<Promotion> promotions = em.createQuery("from Promotion", Promotion.class).getResultList();
-        em.close();
-        return promotions;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Promotion> query = session.createQuery("from Promotion", Promotion.class);
+            return query.list();
+        }
     }
 
     public void updatePromotion(Promotion promotion) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(promotion);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(promotion);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deletePromotion(Promotion promotion) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        promotion = em.merge(promotion);
-        em.remove(promotion);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(promotion);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<HBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AdminhrSpaceController"
-      prefWidth="600.0" prefHeight="400.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox spacing="20" styleClass="vbox" stylesheets="/styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AdminhrSpaceController" HBox.hgrow="ALWAYS">
     <!-- Left Menu -->
-    <VBox fx:id="menuContainer" prefWidth="150.0" style="-fx-background-color: #f0f0f0;">
-        <ListView fx:id="menuListView" onMouseClicked="#handleMenuClick" prefHeight="400.0"/>
+    <VBox fx:id="menuContainer" styleClass="menu-container" VBox.vgrow="ALWAYS">
+        <ListView fx:id="menuListView" onMouseClicked="#handleMenuClick" styleClass="menu-list-view" VBox.vgrow="ALWAYS" />
     </VBox>
 
     <!-- Main Container -->
-    <AnchorPane fx:id="mainContainer" style="-fx-background-color: #ffffff;" prefWidth="450.0" />
+    <AnchorPane fx:id="mainContainer" styleClass="main-container" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
 </HBox>

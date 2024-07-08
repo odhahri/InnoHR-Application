@@ -1,10 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.EmployeeManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox prefHeight="771.0" prefWidth="502.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.EmployeeManageController">
+    <Label fx:id="pageTitle" style="-fx-font-size: 24px;" />
+    <TextField fx:id="searchField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="196.0" promptText="Search by username" />
+    <Button fx:id="searchButton" prefHeight="25.0" prefWidth="125.0" text="Search" />
+    <Button fx:id="hireButton" prefHeight="25.0" prefWidth="125.0" text="Hire an employee" />
+    <GridPane hgap="10" prefHeight="611.0" prefWidth="515.0" vgap="10">
+        <TextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="fnameField" promptText="First Name" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="lnameField" promptText="Last Name" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="addressField" promptText="Address" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <ComboBox fx:id="managerComboBox" promptText="Manager" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <ComboBox fx:id="departmentComboBox" promptText="Department" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <ComboBox fx:id="teamComboBox" promptText="Team" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="8">
+            <TableView fx:id="documentsTable" prefHeight="180.0" prefWidth="300.0">
+                <columns>
+                    <TableColumn text="ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="doc_id" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Label">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="doc_label" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            <HBox spacing="10">
+                <Button fx:id="addDocumentButton" text="Add" />
+                <Button fx:id="deleteDocumentButton" text="Delete" />
+            </HBox>
+        </VBox>
+
+        <VBox prefHeight="180.0" prefWidth="300.0" GridPane.columnIndex="0" GridPane.rowIndex="9">
+            <TableView fx:id="trainingTable" prefHeight="180.0" prefWidth="300.0">
+                <columns>
+                    <TableColumn text="Label">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="train_label" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Chapters">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="train_chapters" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            <HBox prefHeight="42.0" prefWidth="208.0" spacing="10">
+                <Button fx:id="addTrainingButton" text="Add" />
+                <Button fx:id="deleteTrainingButton" text="Delete" />
+            </HBox>
+        </VBox>
+
+        <TextField fx:id="empIdField" prefHeight="104.0" prefWidth="192.0" promptText="Id" GridPane.rowIndex="10" />
+
+        <ImageView fx:id="imageView" fitHeight="99.0" fitWidth="164.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="3">
+            <image>
+                <Image url="@../../../../../hrimageback.jpg" />
+            </image>
+        </ImageView>
+        <Button onAction="#importImage" text="Import Image" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Button fx:id="dischargeButton" prefHeight="37.0" prefWidth="112.0" text="Discharge" GridPane.rowIndex="11" />
+        <Button fx:id="saveButton" prefHeight="37.0" prefWidth="82.0" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+        <columnConstraints>
+            <ColumnConstraints maxWidth="208.0" minWidth="199.0" prefWidth="208.0" />
+            <ColumnConstraints maxWidth="165.0" minWidth="156.0" prefWidth="156.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints maxHeight="25.0" minHeight="0.0" prefHeight="14.0" />
+            <RowConstraints maxHeight="34.0" minHeight="0.0" prefHeight="20.0" />
+            <RowConstraints maxHeight="41.0" minHeight="2.0" prefHeight="14.0" />
+            <RowConstraints maxHeight="180.0" minHeight="0.0" prefHeight="78.0" />
+            <RowConstraints maxHeight="180.0" minHeight="0.0" prefHeight="90.0" />
+            <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="0.0" />
+            <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="0.0" />
+            <RowConstraints maxHeight="74.0" minHeight="0.0" prefHeight="26.0" />
+        </rowConstraints>
+    </GridPane>
 </VBox>

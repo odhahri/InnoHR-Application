@@ -9,10 +9,12 @@ public class Holiday {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int holiday_id;
+    @Column(nullable = false)
     private String holiday_type;
+    @Column(nullable = false)
     private Date holiday_start_date;
+    @Column(nullable = false)
     private Date holiday_end_date;
-
     @OneToMany(mappedBy = "holiday")
     private List<Request> requests;
 

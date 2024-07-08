@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Request;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class RequestDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
     public void saveRequest(Request request) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(request);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(request);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public Request findRequestById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Request request = em.find(Request.class, id);
-        em.close();
-        return request;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Request.class, id);
+        }
     }
 
     public List<Request> findAllRequests() {
-        EntityManager em = emf.createEntityManager();
-        List<Request> requests = em.createQuery("from Request", Request.class).getResultList();
-        em.close();
-        return requests;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Request> query = session.createQuery("from Request", Request.class);
+            return query.list();
+        }
     }
 
     public void updateRequest(Request request) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(request);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(request);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteRequest(Request request) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        request = em.merge(request);
-        em.remove(request);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(request);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.HireEmployeeController">
+    <VBox alignment="CENTER" prefHeight="665.0" prefWidth="502.0" spacing="10.0">
+        <Label style="-fx-font-size: 18px;" text="Hire a new employee" />
+        <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="247.0" promptText="Username" />
+        <TextField fx:id="fnameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="247.0" promptText="First Name" />
+        <TextField fx:id="lnameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="247.0" promptText="Last Name" />
+        <TextField fx:id="emailField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="247.0" promptText="Email" />
+        <TextField fx:id="addressField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="247.0" promptText="Address" />
+        <ComboBox fx:id="managerComboBox" promptText="Manager" />
+        <ComboBox fx:id="departmentComboBox" promptText="Department" />
+        <ComboBox fx:id="teamComboBox" promptText="Team" />
+        <TableView fx:id="documentsTable" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="118.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+        <TableView fx:id="trainingTable" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <ImageView fx:id="imageView" fitHeight="99.0" fitWidth="164.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="3">
+            <image>
+                <Image url="@../../../../../hrimageback.jpg" />
+            </image>
+        </ImageView>
+        <Button onAction="#importImage" text="Import Image" />
+        <Button onAction="#hireEmployee" text="Hire" />
+    </VBox>
+</ScrollPane>

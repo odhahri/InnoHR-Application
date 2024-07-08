@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="300.0" prefWidth="400.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.LoginController">
-    <TextField fx:id="usernameField" promptText="Username">
-        <VBox.margin>
-            <Insets left="100.0" right="100.0" />
-        </VBox.margin>
-    </TextField>
-    <PasswordField fx:id="passwordField" promptText="Password">
-        <VBox.margin>
-            <Insets left="100.0" right="100.0" />
-        </VBox.margin>
-    </PasswordField>
-    <Button onAction="#handleLoginAction" prefHeight="25.0" prefWidth="291.0" text="Login">
-        <VBox.margin>
-            <Insets left="100.0" right="100.0" />
-        </VBox.margin>
-    </Button>
+<VBox fx:id="loginBox" alignment="CENTER" prefHeight="489.0" prefWidth="748.0" spacing="15.0" style="-fx-background-image: url('/hrimageback.jpg'); -fx-background-size: cover; -fx-background-blend-mode: overlay; -fx-background-color: rgba(0, 0, 0, 0.5);" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.LoginController">
+    <children>
+        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to InnovHR software" textAlignment="CENTER" wrappingWidth="932.875">
+            <font>
+                <Font name="System Bold Italic" size="59.0" />
+            </font>
+        </Text>
+      <Region layoutX="10.0" layoutY="299.0" prefHeight="26.0" prefWidth="933.0" />
+        <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you HR expert, manager or collaborator?" textAlignment="CENTER" wrappingWidth="759.7578125">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+        </Text>
+      <Region layoutX="10.0" layoutY="137.0" prefHeight="4.0" prefWidth="933.0" />
+        <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="298.0" promptText="Enter your username" style="-fx-background-color: rgba(0, 0, 0, 0.3);">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></TextField>
+      <Region layoutX="10.0" layoutY="125.0" prefHeight="0.0" prefWidth="933.0" />
+        <PasswordField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="300.0" promptText="Enter your password" style="-fx-background-color: rgba(0, 0, 0, 0.3);">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></PasswordField>
+        <Region prefHeight="8.0" prefWidth="664.0" />
+        <Button mnemonicParsing="false" onAction="#handleLoginAction" prefHeight="29.0" prefWidth="146.0" text="Sign in">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font></Button>
+    </children>
 </VBox>

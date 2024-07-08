@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Training;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class TrainingDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
     public void saveTraining(Training training) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(training);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(training);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
-    public Training findTrainingById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Training training = em.find(Training.class, id);
-        em.close();
-        return training;
+    public static Training findTrainingById(int id) {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Training.class, id);
+        }
     }
 
-    public List<Training> findAllTrainings() {
-        EntityManager em = emf.createEntityManager();
-        List<Training> trainings = em.createQuery("from Training", Training.class).getResultList();
-        em.close();
-        return trainings;
+    public static List<Training> findAllTrainings() {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Training> query = session.createQuery("from Training", Training.class);
+            return query.list();
+        }
     }
 
     public void updateTraining(Training training) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(training);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(training);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteTraining(Training training) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        training = em.merge(training);
-        em.remove(training);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(training);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }

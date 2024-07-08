@@ -1,6 +1,6 @@
 package com.innovhr.innovhrapp.daos;
 
-import com.innovhr.innovhrapp.models.Salary;
+import com.innovhr.innovhrapp.models.Document;
 import com.innovhr.innovhrapp.utils.database.BDConnectivity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,13 +8,14 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class SalaryDAO {
+public class DocumentDAO {
 
-    public void saveSalary(Salary salary) {
+    // Save a new Document
+    public void saveDocument(Document document) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(salary);
+            session.persist(document);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -24,24 +25,37 @@ public class SalaryDAO {
         }
     }
 
-    public Salary findSalaryById(int id) {
+    // Find a Document by ID
+    public static Document findDocumentById(int id) {
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
-            return session.get(Salary.class, id);
+            return session.get(Document.class, id);
         }
     }
 
-    public List<Salary> findAllSalaries() {
+    // Find a Document by label
+    public static Document findDocumentByLabel(String label) {
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
-            Query<Salary> query = session.createQuery("from Salary", Salary.class);
+            String hql = "FROM Document WHERE doc_label = :label";
+            Query<Document> query = session.createQuery(hql, Document.class);
+            query.setParameter("label", label);
+            return query.uniqueResult();
+        }
+    }
+
+    // Find all Documents
+    public static List<Document> findAllDocuments() {
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Document> query = session.createQuery("from Document", Document.class);
             return query.list();
         }
     }
 
-    public void updateSalary(Salary salary) {
+    // Update an existing Document
+    public static void updateDocument(Document document) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(salary);
+            session.merge(document);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -51,11 +65,12 @@ public class SalaryDAO {
         }
     }
 
-    public void deleteSalary(Salary salary) {
+    // Delete a Document
+    public static void deleteDocument(Document document) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.delete(salary);
+            session.remove(document);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

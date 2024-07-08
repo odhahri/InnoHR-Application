@@ -8,12 +8,15 @@ public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int promo_id;
+    @Column(nullable = false)
     private String promo_type;
+    @Column(nullable = false)
     private Date promo_date;
+    @Column(nullable = false)
     private float promo_amount;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     // getters and setters

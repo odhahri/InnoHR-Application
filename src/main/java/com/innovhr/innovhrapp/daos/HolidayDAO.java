@@ -1,50 +1,67 @@
 package com.innovhr.innovhrapp.daos;
 
 import com.innovhr.innovhrapp.models.Holiday;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import com.innovhr.innovhrapp.utils.database.BDConnectivity;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class HolidayDAO {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("InnovHRApp");
 
     public void saveHoliday(Holiday holiday) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(holiday);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(holiday);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public Holiday findHolidayById(int id) {
-        EntityManager em = emf.createEntityManager();
-        Holiday holiday = em.find(Holiday.class, id);
-        em.close();
-        return holiday;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            return session.get(Holiday.class, id);
+        }
     }
 
     public List<Holiday> findAllHolidays() {
-        EntityManager em = emf.createEntityManager();
-        List<Holiday> holidays = em.createQuery("from Holiday", Holiday.class).getResultList();
-        em.close();
-        return holidays;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            Query<Holiday> query = session.createQuery("from Holiday", Holiday.class);
+            return query.list();
+        }
     }
 
     public void updateHoliday(Holiday holiday) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(holiday);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(holiday);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
     public void deleteHoliday(Holiday holiday) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        holiday = em.merge(holiday);
-        em.remove(holiday);
-        em.getTransaction().commit();
-        em.close();
+        Transaction transaction = null;
+        try (Session session = BDConnectivity.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(holiday);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 }
