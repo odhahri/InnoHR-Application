@@ -11,9 +11,9 @@ public class Teamlead {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id", nullable = true)
-    private Team team;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "team_id", nullable = true)
+//    private Team team;
 
     // getters and setters
     public int getId() {
@@ -31,12 +31,12 @@ public class Teamlead {
     public void setName(String name) {
         this.name = name;
     }
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team name) {
-        this.team = team;
-    }
+//    public Team getTeam() {
+//        return team;
+//    }
+//
+//    public void setTeam(Team name) {
+//        this.team = team;
+//    }
 
 }

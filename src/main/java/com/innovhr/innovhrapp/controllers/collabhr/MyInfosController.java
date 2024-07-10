@@ -1,4 +1,4 @@
-package com.innovhr.innovhrapp.controllers.adminhr;
+package com.innovhr.innovhrapp.controllers.collabhr;
 
 import com.innovhr.innovhrapp.daos.*;
 import com.innovhr.innovhrapp.models.*;
@@ -9,10 +9,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,8 +27,18 @@ import java.util.stream.Collectors;
 
 import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
 
-public class HireEmployeeController implements AccessControlled {
+public class MyInfosController implements AccessControlled {
 
+    @FXML
+    private Label pageTitle;
+    @FXML
+    private Button hireButton;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private TextField empIdField;
     @FXML
     private TextField usernameField;
     @FXML
@@ -34,25 +50,35 @@ public class HireEmployeeController implements AccessControlled {
     @FXML
     private TextField addressField;
     @FXML
-    private ComboBox<String> departmentComboBox;
-    @FXML
     private ComboBox<String> managerComboBox;
     @FXML
+    private ComboBox<String> departmentComboBox;
+    @FXML
     private ComboBox<String> teamComboBox;
-
-
+    @FXML
+    private TableView<Document> documentsTable;
+    @FXML
+    private TableView<Training> trainingTable;
+    @FXML
+    private Button dischargeButton;
+    @FXML
+    private Button saveButton;
+    @FXML
+    private Button addDocumentButton;
+    @FXML
+    private Button deleteDocumentButton;
+    @FXML
+    private Button addTrainingButton;
+    @FXML
+    private Button deleteTrainingButton;
     @FXML
     private ImageView imageView;
     private byte[] imageBytes;
-    private final String pageName = "Hire employee page";
-    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.ADMIN;
+    private final String pageName = "Employee management";
+    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.COLLAB;
     private final UserNavigationHandler navigationHandler;
 
-    @FXML
-    public void initialize() {
-        populateComboBoxes();
-    }
-    public HireEmployeeController(){
+    public MyInfosController(){
         this.navigationHandler = new UserNavigationHandler(SessionManager.getInstance());
     }
     @Override
@@ -66,11 +92,12 @@ public class HireEmployeeController implements AccessControlled {
     }
     private void disableComponents() {
         // Disable components to prevent unauthorized interactions
+        setFieldsDisabled(true);
     }
     @FXML
     private void importImage() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une image");
+        fileChooser.setTitle("Choose an Image");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
@@ -87,9 +114,40 @@ public class HireEmployeeController implements AccessControlled {
         }
     }
 
-
     @FXML
-    private void hireEmployee() {
+    public void initialize() {
+        pageTitle.setText("My personal informations");
+        empIdField.setVisible(false);
+        searchEmployee();
+        saveButton.setOnAction(event -> saveEmployee());
+        // Populate department and team combo boxes
+        populateComboBoxes();
+        setFieldsDisabled(true);
+    }
+
+    private void setFieldsDisabled(boolean disabled) {
+        usernameField.setDisable(disabled);
+
+        emailField.setDisable(disabled);
+        managerComboBox.setDisable(disabled);
+        departmentComboBox.setDisable(disabled);
+        teamComboBox.setDisable(disabled);
+    }
+
+    private void searchEmployee() {
+
+        Employee employee = EmployeeDAO.findEmployeeByUsername(EmployeeDAO.findEmployeeById(SessionManager.getInstance().getLoggedInUser().getPersonId()).getEmp_username());
+        if (employee != null) {
+            populateEmployeeData(employee);
+            setFieldsDisabled(false);
+        } else {
+            showAlert("Employee not found", "No employee found ");
+            setFieldsDisabled(true);
+        }
+    }
+
+
+    private void saveEmployee() {
         try {
             String username = usernameField.getText();
             String firstName = fnameField.getText();
@@ -107,15 +165,13 @@ public class HireEmployeeController implements AccessControlled {
             String teamString = teamComboBox.getValue();
 
             if (departmentString == null ) {
-                showAlert("Error", "Department must be selected.");
+                showAlert("Error", "Departmentmust be selected.");
                 return;
             }
+
+            // Extract IDs from ComboBox values
+
             int departmentId = Integer.parseInt(departmentString.split(" \\| ")[0]);
-
-
-
-
-
 
             Department department = DepartmentDAO.findDepartmentById(departmentId);
 
@@ -124,9 +180,22 @@ public class HireEmployeeController implements AccessControlled {
                 return;
             }
 
-            Employee employee = new Employee();;
+            Employee employee;
+
+            if (empIdField.getText().isEmpty()) {
+                // New employee
+                employee = new Employee();
+            } else {
+                // Existing employee
+                int employeeId = Integer.parseInt(empIdField.getText());
+                employee = EmployeeDAO.findEmployeeById(employeeId);
+                if (employee == null) {
+                    showAlert("Error", "Employee not found.");
+                    return;
+                }
+            }
             // Extract IDs from ComboBox values
-            if (managerString !=null ){
+            if (managerString!=null){
                 int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
                 Manager manager = ManagerDAO.findManagerById(managerId);
                 employee.setManager(manager);
@@ -142,33 +211,49 @@ public class HireEmployeeController implements AccessControlled {
             employee.setEmp_email(email);
             employee.setEmp_address(address);
             employee.setDepartment(department);
-            employee.setEmp_phone("3453453");
-
-            if (imageBytes != null ) {
+            if (imageBytes != null) {
                 employee.setEmp_image(imageBytes);
             }
 
-            EmployeeDAO.saveEmployee(employee);
-            User employeeUser = new User();
-            employeeUser.setUsername(employee.getEmp_username());
-            employeeUser.setPassword(employee.getEmp_username()+"-innovhr");
-            employeeUser.setAccessLevel(User.AccessLevel.COLLAB);
-            employeeUser.setPersonId(EmployeeDAO.findEmployeeByUsername(employee.getEmp_username()).getEmp_id());
-            UserDAO.saveUser(employeeUser);
-            showAlert("Success", "Employee hired successfully.");
+
+
+            EmployeeDAO.updateEmployee(employee);
+
+            showAlert("Success", "Employee saved successfully.");
+            setFieldsDisabled(true);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Failed to hire employee. Please try again.");
+            showAlert("Error", "Failed to save employee. Please try again.");
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+
+
+
+    private void populateEmployeeData(Employee employee) {
+        empIdField.setText(String.valueOf(employee.getEmp_id()));
+        usernameField.setText(employee.getEmp_username());
+        fnameField.setText(employee.getEmp_fname());
+        lnameField.setText(employee.getEmp_lname());
+        emailField.setText(employee.getEmp_email());
+        addressField.setText(employee.getEmp_address());
+        if (employee.getManager() != null){
+            managerComboBox.setValue(employee.getManager().getId() + " | " + employee.getManager().getName());
+        }
+        departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
+        if (employee.getTeam() != null) {
+            teamComboBox.setValue(employee.getTeam().getTeam_id() + " | " + employee.getTeam().getTeam_label());
+        }
+
+        // Populate other fields and tables
+        if (employee.getEmp_image() != null) {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(employee.getEmp_image());
+            Image image = new Image(inputStream);
+            imageView.setImage(image);
+        }
     }
+
     private void populateComboBoxes() {
         // Populate managerComboBox with data from the database
         List<String> managers = ManagerDAO.findAllManagers().stream()
@@ -199,5 +284,19 @@ public class HireEmployeeController implements AccessControlled {
             teams = List.of("No teams exist");
         }
         teamComboBox.setItems(FXCollections.observableArrayList(teams));
+    }
+
+
+
+
+
+
+
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

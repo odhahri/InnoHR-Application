@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.DocumentManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
+<VBox prefHeight="800.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.DocumentManageController">
+    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Document Management" />
+
+    <TableView fx:id="documentsTable" prefHeight="500.0" prefWidth="600.0">
+        <columns>
+            <TableColumn fx:id="docIdColumn" text="ID" />
+            <TableColumn fx:id="docLabelColumn" text="Label" />
+            <TableColumn fx:id="docTypeColumn" text="Type" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button fx:id="addDocumentButton" text="Add Document" />
+        <Button fx:id="deleteDocumentButton" text="Delete Document" />
+    </HBox>
 </VBox>

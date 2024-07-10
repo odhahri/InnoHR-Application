@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="800.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.collabhr.MyInfosController">
+    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Employee Management" />
+
+    <HBox spacing="10" />
+
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" />
+            <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         <RowConstraints />
+        </rowConstraints>
+
+        <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label text="First Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="fnameField" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label text="Last Name:" GridPane.rowIndex="3" />
+        <TextField fx:id="lnameField" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+        <Label text="Email:" GridPane.rowIndex="4" />
+        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+        <Label text="Address:" GridPane.rowIndex="5" />
+        <TextField fx:id="addressField" promptText="Address" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+        <Label text="Manager:" GridPane.rowIndex="6" />
+        <ComboBox fx:id="managerComboBox" promptText="Manager" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+        <Label text="Department:" GridPane.rowIndex="7" />
+        <ComboBox fx:id="departmentComboBox" promptText="Department" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+        <Label text="Team:" GridPane.rowIndex="8" />
+        <ComboBox fx:id="teamComboBox" promptText="Team" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+
+
+        <Label text="Image:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="12">
+            <Button fx:id="saveButton" text="Save" />
+        </HBox>
+
+        <TextField fx:id="empIdField" promptText="Employee ID" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+         <ImageView fx:id="imageView" fitHeight="100.0" fitWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+             <image>
+                 <Image url="@../../../../../hrimageback.jpg" />
+             </image>
+         </ImageView>
+         <Button onAction="#importImage" text="Import Image" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+    </GridPane>
+</VBox>

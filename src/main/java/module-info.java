@@ -15,6 +15,7 @@ module com.innovhr.innovhrapp {
     requires java.persistence;
     requires jakarta.persistence;
     requires jakarta.validation;
+    requires java.desktop;
     opens com.innovhr.innovhrapp to javafx.fxml;
     exports com.innovhr.innovhrapp.models;
     opens com.innovhr.innovhrapp.models to  org.hibernate.orm.core;
@@ -24,5 +25,7 @@ module com.innovhr.innovhrapp {
     opens com.innovhr.innovhrapp.controllers to javafx.fxml;
     opens com.innovhr.innovhrapp.controllers.adminhr to javafx.fxml;
     exports com.innovhr.innovhrapp.controllers.shared;
+    exports com.innovhr.innovhrapp.controllers.collabhr ;
     opens com.innovhr.innovhrapp.controllers.shared to javafx.fxml;
+    opens com.innovhr.innovhrapp.controllers.collabhr to javafx.fxml;
 }

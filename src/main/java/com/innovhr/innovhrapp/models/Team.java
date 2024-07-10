@@ -25,8 +25,8 @@ public class Team {
     private List<Employee> employees;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "teamlead_id", nullable = true)
-    private Teamlead teamlead;
+    @JoinColumn(name = "teamlead_Empid", nullable = true)
+    private Employee teamlead;
 
 
 
@@ -72,11 +72,11 @@ public class Team {
         this.employees = employees;
     }
 
-    public Teamlead getTeamlead() {
+    public Employee getTeamlead() {
         return teamlead;
     }
 
-    public void setTeamlead(Teamlead teamlead) {
+    public void setTeamlead(Employee teamlead) {
         this.teamlead = teamlead;
     }
 

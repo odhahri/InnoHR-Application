@@ -11,7 +11,7 @@ import java.util.List;
 public class DocumentDAO {
 
     // Save a new Document
-    public void saveDocument(Document document) {
+    public static void saveDocument(Document document) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

@@ -15,21 +15,23 @@ public class ViewPresets {
         public static final String fxml_admin_request_path ="/com/innovhr/innovhrapp/view/adminhr/request-manage.fxml" ;
         public static final String fxml_admin_team_path = "/com/innovhr/innovhrapp/view/adminhr/team-manage.fxml";
         public static final String fxml_admin_training_path ="/com/innovhr/innovhrapp/view/adminhr/training-manage.fxml" ;
+        public static final String fxml_admin_salaries_path="/com/innovhr/innovhrapp/view/adminhr/salary-manage.fxml" ;
     }
     public static class ManagerFxmlViews{
         public static final String fxml_manager_space_path = "";
         public static final String fxml_manager_request_path ="" ;
         public static final String fxml_manager_team_path = "";
     }
-    public static class CollabFxmlViews{
-        public static final String fxml_collab_space_path = "";
-        public static final String fxml_collab_department_path = "";
-        public static final String fxml_collab_document_path ="" ;
-        public static final String fxml_collab_infos_path = "";
-        public static final String fxml_collab_request_path ="" ;
-        public static final String fxml_collab_team_path = "";
-        public static final String fxml_collab_teamplan_path = "";
-        public static final String fxml_collab_training_path ="" ;
+    public static class CollabFxmlViews {
+        public static final String fxml_collab_space_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-space.fxml";
+        public static final String fxml_collab_perso_docs_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-perso-docs.fxml";
+        public static final String fxml_collab_docs_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-docs.fxml";
+        public static final String fxml_collab_requests_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-requests.fxml";
+        public static final String fxml_collab_infos_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-infos.fxml";
+        public static final String fxml_collab_team_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-team.fxml";
+        public static final String fxml_collab_teamplan_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-team-plan.fxml";
+        public static final String fxml_collab_trains_path = "/com/innovhr/innovhrapp/view/collaboratorhr/collab-trains.fxml";
+        public static final String fxml_holiday_request_path = "/com/innovhr/innovhrapp/view/collaboratorhr/holiday-request.fxml";
     }
 
     public static class SigninFXMLViews {

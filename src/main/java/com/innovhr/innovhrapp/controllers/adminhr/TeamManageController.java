@@ -76,8 +76,8 @@ public class TeamManageController {
 
         TableColumn<Team, String> teamLeadColumn = new TableColumn<>("Team Lead");
         teamLeadColumn.setCellValueFactory(cellData -> {
-            Teamlead teamlead = cellData.getValue().getTeamlead();
-            return new SimpleStringProperty(teamlead != null ? teamlead.getName() : "None");
+            Employee teamlead = cellData.getValue().getTeamlead();
+            return new SimpleStringProperty(teamlead != null ? teamlead.getEmp_username() : "None");
         });
 
         TableColumn<Team, String> managerColumn = new TableColumn<>("Manager");
@@ -92,7 +92,7 @@ public class TeamManageController {
             teamLabelField.setText(team.getTeam_label());
             teamDescriptionField.setText(team.getTeam_description());
             departmentComboBox.setValue(team.getDepartment().getDep_id() + " | " + team.getDepartment().getDep_name());
-            teamLeadComboBox.setValue(team.getTeamlead() != null ? team.getTeamlead().getId() + " | " + team.getTeamlead().getName() : null);
+            teamLeadComboBox.setValue(team.getTeamlead() != null ? team.getTeamlead().getEmp_username() : null);
             managerComboBox.setValue(team.getManager().getId() + " | " + team.getManager().getName());
             setFieldsDisabled(false);
             populateTeamLeadComboBox(team.getEmployees());
@@ -113,56 +113,67 @@ public class TeamManageController {
 
     private void saveTeam() {
         try {
-            String label = teamLabelField.getText();
-            String description = teamDescriptionField.getText();
-            String departmentString = departmentComboBox.getValue();
-            String teamLeadString = teamLeadComboBox.getValue();
-            String managerString = managerComboBox.getValue();
-
-            if (label.isEmpty() || description.isEmpty() || departmentString == null || managerString == null) {
+            if (!validateFields()) {
                 AlertUtils.showAlertError("Error", "All fields except Team Lead are required.");
                 return;
             }
 
-            int departmentId = Integer.parseInt(departmentString.split(" \\| ")[0]);
-            Department department = DepartmentDAO.findDepartmentById(departmentId);
-            int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
-            Manager manager = ManagerDAO.findManagerById(managerId);
-
-            Team team = new Team();
-            team.setTeam_label(label);
-            team.setTeam_description(description);
-            team.setDepartment(department);
-            team.setManager(manager);
-            Teamlead teamlead = null;
-            if (teamLeadString != null) {
-                int teamLeadId = Integer.parseInt(teamLeadString.split(" \\| ")[0]);
-                Employee employee = EmployeeDAO.findEmployeeById(teamLeadId);
-                 teamlead = new Teamlead();
-                teamlead.setId(employee.getEmp_id());
-                teamlead.setName(employee.getEmp_username());
-                team.setTeamlead(teamlead);
-                TeamleadDAO.saveTeamLead(teamlead);
-            }
-
+            Team team = createTeamFromFields();
 
             if (!teamIdField.getText().isEmpty()) {
-                int id = Integer.parseInt(teamIdField.getText());
-                team.setTeam_id(id);
-                TeamDAO.updateTeam(team);
-                assert teamlead != null;
-                teamlead.setTeam(team);
+                updateExistingTeam(team);
                 AlertUtils.showAlertSuccess("Success", "Team updated successfully.");
             } else {
                 TeamDAO.saveTeam(team);
                 AlertUtils.showAlertSuccess("Success", "Team saved successfully.");
             }
+
             loadTeams();
             clearFields();
         } catch (NumberFormatException e) {
             AlertUtils.showAlertError("Error", "Invalid number format.");
         } catch (Exception e) {
             AlertUtils.showAlertError("Error", "Error saving team: " + e.getMessage());
+        }
+    }
+
+    private boolean validateFields() {
+        return !teamLabelField.getText().isEmpty() && !teamDescriptionField.getText().isEmpty()
+                && departmentComboBox.getValue() != null && managerComboBox.getValue() != null;
+    }
+
+    private Team createTeamFromFields() throws Exception {
+        String label = teamLabelField.getText();
+        String description = teamDescriptionField.getText();
+        String departmentString = departmentComboBox.getValue();
+        String teamLeadString = teamLeadComboBox.getValue();
+        String managerString = managerComboBox.getValue();
+
+        int departmentId = Integer.parseInt(departmentString.split(" \\| ")[0]);
+        Department department = DepartmentDAO.findDepartmentById(departmentId);
+        int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
+        Manager manager = ManagerDAO.findManagerById(managerId);
+        Employee teamlead = EmployeeDAO.findEmployeeByUsername(teamLeadString);
+
+        Team team = new Team();
+        team.setTeam_label(label);
+        team.setTeam_description(description);
+        team.setDepartment(department);
+        team.setManager(manager);
+        team.setTeamlead(teamlead);
+
+
+
+        return team;
+    }
+
+    private void updateExistingTeam(Team team) throws Exception {
+        int id = Integer.parseInt(teamIdField.getText());
+        team.setTeam_id(id);
+        TeamDAO.updateTeam(team);
+
+        if (team.getTeamlead() != null) {
+            team.getTeamlead().setTeam(team);
         }
     }
 
@@ -208,7 +219,7 @@ public class TeamManageController {
 
     private void populateTeamLeadComboBox(List<Employee> employees) {
         List<String> teamLeadItems = employees.stream()
-                .map(emp -> emp.getEmp_id() + " | " + emp.getEmp_username())
+                .map(Employee::getEmp_username)
                 .collect(Collectors.toList());
         teamLeadComboBox.setItems(FXCollections.observableArrayList(teamLeadItems));
     }

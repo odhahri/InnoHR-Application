@@ -8,9 +8,14 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int doc_id;
+    @Column(nullable = false)
     private String doc_label;
+    @Column(nullable = false)
     private String doc_type;
 
+    @Lob
+    @Column(nullable = false)
+    private byte[] content;
     @ManyToMany(mappedBy = "documents")
     private List<Employee> employees;
 
@@ -48,5 +53,13 @@ public class Document {
 
     public void setRequests(List<Request> requests) {
         this.requests = requests;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }

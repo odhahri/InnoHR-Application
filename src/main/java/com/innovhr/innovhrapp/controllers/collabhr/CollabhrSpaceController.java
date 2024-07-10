@@ -1,4 +1,4 @@
-package com.innovhr.innovhrapp.controllers.adminhr;
+package com.innovhr.innovhrapp.controllers.collabhr;
 
 import com.innovhr.innovhrapp.models.User;
 import com.innovhr.innovhrapp.utils.component.CustomCellFactory;
@@ -16,9 +16,9 @@ import java.io.IOException;
 
 import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
 
-public class AdminhrSpaceController implements AccessControlled {
-    private final String pageName = "AdminhrSpace";
-    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.ADMIN;
+public class CollabhrSpaceController implements AccessControlled {
+    private final String pageName = "CollabhrSpace";
+    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.COLLAB;
 
     @FXML
     private ListView<String> menuListView;
@@ -28,7 +28,7 @@ public class AdminhrSpaceController implements AccessControlled {
 
     private final UserNavigationHandler navigationHandler;
 
-    public AdminhrSpaceController() {
+    public CollabhrSpaceController() {
         this.navigationHandler = new UserNavigationHandler(SessionManager.getInstance());
     }
 
@@ -36,10 +36,10 @@ public class AdminhrSpaceController implements AccessControlled {
     public void initialize() {
         checkAccess();
         // Populate menu items
-        menuListView.getItems().addAll("Employees", "Departments", "Manager", "Teams", "Documents", "Trainings", "Requests","Salaries");
+        menuListView.getItems().addAll("My Infos", "Personal Documents", "Documents", "Requests", "Team", "Team Plan", "Trainings");
         menuListView.setCellFactory(listView -> new CustomCellFactory());
-        menuListView.getSelectionModel().select("Employees");
-        String fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_employee_path;
+        menuListView.getSelectionModel().select("My Infos");
+        String fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_infos_path;
         loadView(fxmlFile);
     }
 
@@ -49,30 +49,28 @@ public class AdminhrSpaceController implements AccessControlled {
         String fxmlFile = "";
 
         switch (selectedItem) {
-            case "Employees":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_employee_path;
+            case "Infos":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_infos_path;
                 break;
-            case "Departments":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_department_path;
-                break;
-            case "Manager":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_manager_path;
-                break;
-            case "Teams":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_team_path;
-                break;
-            case "Documents":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_document_path;
-                break;
-            case "Trainings":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_training_path;
+            case "Personal Documents":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_perso_docs_path;
                 break;
             case "Requests":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_request_path;
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_requests_path;
                 break;
-            case "Salaries":
-                fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_salaries_path;
+            case "Documents":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_docs_path;
                 break;
+            case "Team":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_team_path;
+                break;
+            case "Team Plan":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_teamplan_path;
+                break;
+            case "Trainings":
+                fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_trains_path;
+                break;
+
             default:
                 // Handle default case if needed
                 break;
@@ -85,7 +83,7 @@ public class AdminhrSpaceController implements AccessControlled {
 
     private void loadView(String fxmlFile) {
         try {
-            Object controller = FXMLViewLoader.loadSceneContainer(mainContainer,fxmlFile);
+            Object controller = FXMLViewLoader.loadSceneContainer(mainContainer, fxmlFile);
             // If the loaded controller implements AccessControlled, perform access check
             if (controller instanceof AccessControlled) {
                 ((AccessControlled) controller).checkAccess();
