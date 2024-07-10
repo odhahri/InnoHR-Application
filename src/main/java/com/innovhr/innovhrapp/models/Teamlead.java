@@ -11,8 +11,9 @@ public class Teamlead {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "teamlead")
-    private List<Team> teams;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id", nullable = true)
+    private Team team;
 
     // getters and setters
     public int getId() {
@@ -30,12 +31,12 @@ public class Teamlead {
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<Team> getTeams() {
-        return teams;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
+    public void setTeam(Team name) {
+        this.team = team;
     }
+
 }

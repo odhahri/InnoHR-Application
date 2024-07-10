@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TeamleadDAO {
 
-    public void saveTeamLead(Teamlead teamLead) {
+    public static void saveTeamLead(Teamlead teamLead) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -24,7 +24,7 @@ public class TeamleadDAO {
         }
     }
 
-    public Teamlead findTeamLeadById(int id) {
+    public static Teamlead findTeamLeadById(int id) {
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             return session.get(Teamlead.class, id);
         }

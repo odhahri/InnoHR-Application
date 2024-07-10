@@ -11,8 +11,6 @@ public class Adminhr {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "adminhr")
-    private List<Manager> managers;
 
     // getters and setters
     public int getId() {
@@ -31,11 +29,4 @@ public class Adminhr {
         this.name = name;
     }
 
-    public List<Manager> getManagers() {
-        return managers;
-    }
-
-    public void setManagers(List<Manager> managers) {
-        this.managers = managers;
-    }
 }

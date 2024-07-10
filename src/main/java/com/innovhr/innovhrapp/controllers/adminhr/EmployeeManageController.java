@@ -2,6 +2,9 @@ package com.innovhr.innovhrapp.controllers.adminhr;
 
 import com.innovhr.innovhrapp.daos.*;
 import com.innovhr.innovhrapp.models.*;
+import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
+import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
+import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +25,9 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EmployeeManageController {
+import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
+
+public class EmployeeManageController implements AccessControlled {
 
     @FXML
     private Label pageTitle;
@@ -69,7 +74,26 @@ public class EmployeeManageController {
     @FXML
     private ImageView imageView;
     private byte[] imageBytes;
+    private final String pageName = "Employee management";
+    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.ADMIN;
+    private final UserNavigationHandler navigationHandler;
 
+    public EmployeeManageController(){
+        this.navigationHandler = new UserNavigationHandler(SessionManager.getInstance());
+    }
+    @Override
+    public void checkAccess() {
+        try {
+            navigationHandler.authorizePageAccess(pageName, ControllerAccessLevel);
+        } catch (UnsupportedOperationException e) {
+            showAlertError("Access Denied", "You do not have permission to view this page.");
+            disableComponents();
+        }
+    }
+    private void disableComponents() {
+        // Disable components to prevent unauthorized interactions
+        setFieldsDisabled(true);
+    }
     @FXML
     private void importImage() {
         FileChooser fileChooser = new FileChooser();
@@ -98,15 +122,15 @@ public class EmployeeManageController {
         hireButton.setOnAction(event -> showHireEmployeeForm());
         saveButton.setOnAction(event -> saveEmployee());
         dischargeButton.setOnAction(event -> dischargeEmployee());
-        addDocumentButton.setOnAction(event -> addDocument());
+        addDocumentButton.setOnAction(event -> showAllDocuments());
         deleteDocumentButton.setOnAction(event -> deleteDocument());
-        addTrainingButton.setOnAction(event -> addTraining());
+        addTrainingButton.setOnAction(event -> showAllTrainings());
         deleteTrainingButton.setOnAction(event -> deleteTraining());
 
         // Populate department and team combo boxes
         populateComboBoxes();
         initializeColumns();
-        populateTables();
+        setFieldsDisabled(true);
     }
 
     private void setFieldsDisabled(boolean disabled) {
@@ -170,26 +194,24 @@ public class EmployeeManageController {
             String departmentString = departmentComboBox.getValue();
             String teamString = teamComboBox.getValue();
 
-            if (managerString == null || departmentString == null || teamString == null) {
-                showAlert("Error", "Manager, Department, and Team must be selected.");
+            if (departmentString == null ) {
+                showAlert("Error", "Departmentmust be selected.");
                 return;
             }
 
             // Extract IDs from ComboBox values
-            int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
+
             int departmentId = Integer.parseInt(departmentString.split(" \\| ")[0]);
-            int teamId = Integer.parseInt(teamString.split(" \\| ")[0]);
 
-            Manager manager = ManagerDAO.findManagerById(managerId);
             Department department = DepartmentDAO.findDepartmentById(departmentId);
-            Team team = TeamDAO.findTeamById(teamId);
 
-            if (manager == null || department == null || team == null) {
+            if (department == null) {
                 showAlert("Error", "Invalid Manager, Department, or Team selection.");
                 return;
             }
 
             Employee employee;
+
             if (empIdField.getText().isEmpty()) {
                 // New employee
                 employee = new Employee();
@@ -202,15 +224,23 @@ public class EmployeeManageController {
                     return;
                 }
             }
-
+            // Extract IDs from ComboBox values
+            if (managerString!=null){
+                int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
+                Manager manager = ManagerDAO.findManagerById(managerId);
+                employee.setManager(manager);
+            }
+            if (teamString!=null){
+                int teamId = Integer.parseInt(teamString.split(" \\| ")[0]);
+                Team team = TeamDAO.findTeamById(teamId);
+                employee.setTeam(team);
+            }
             employee.setEmp_username(username);
             employee.setEmp_fname(firstName);
             employee.setEmp_lname(lastName);
             employee.setEmp_email(email);
             employee.setEmp_address(address);
-            employee.setManager(manager);
             employee.setDepartment(department);
-            employee.setTeam(team);
             if (imageBytes != null) {
                 employee.setEmp_image(imageBytes);
             }
@@ -256,9 +286,13 @@ public class EmployeeManageController {
         lnameField.setText(employee.getEmp_lname());
         emailField.setText(employee.getEmp_email());
         addressField.setText(employee.getEmp_address());
-        managerComboBox.setValue(employee.getManager().getId() + " | " + employee.getManager().getName());
+        if (employee.getManager() != null){
+            managerComboBox.setValue(employee.getManager().getId() + " | " + employee.getManager().getName());
+        }
         departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
-        teamComboBox.setValue(employee.getTeam().getTeam_id() + " | " + employee.getTeam().getTeam_label());
+        if (employee.getTeam() != null) {
+            teamComboBox.setValue(employee.getTeam().getTeam_id() + " | " + employee.getTeam().getTeam_label());
+        }
 
         // Populate document table
         ObservableList<Document> documents = FXCollections.observableArrayList(employee.getDocuments());
@@ -340,35 +374,68 @@ public class EmployeeManageController {
         trainingTable.getColumns().setAll(trainLabelColumn, trainChaptersColumn);
     }
 
-    private void addDocument() {
-        // Open a new window to select documents and add them to the documentsTable
-        // For simplicity, let's assume you have a method that returns a list of selected documents
-        List<Document> selectedDocuments = DocumentDAO.findAllDocuments();
-        documentsTable.getItems().addAll(selectedDocuments);
+
+
+
+    private void showAllDocuments() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/innovhr/innovhrapp/view/adminhr/AllDocuments.fxml"));
+            Parent root = loader.load();
+            AllDocumentsController controller = loader.getController();
+            controller.setParentController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Select Document");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllTrainings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/innovhr/innovhrapp/view/adminhr/AllTrainings.fxml"));
+            Parent root = loader.load();
+            AllTrainingsController controller = loader.getController();
+            controller.setParentController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Select Training");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addDocumentToTable(Document document) {
+        if (!documentsTable.getItems().contains(document)){
+            documentsTable.getItems().add(document);
+        }else{
+            showAlert("","Already added Document");
+        }
     }
 
     private void deleteDocument() {
         Document selectedDocument = documentsTable.getSelectionModel().getSelectedItem();
         if (selectedDocument != null) {
             documentsTable.getItems().remove(selectedDocument);
-        } else {
-            showAlert("Error", "No document selected for deletion.");
         }
     }
 
-    private void addTraining() {
-        // Open a new window to select trainings and add them to the trainingTable
-        // For simplicity, let's assume you have a method that returns a list of selected trainings
-        List<Training> selectedTrainings = TrainingDAO.findAllTrainings();
-        trainingTable.getItems().addAll(selectedTrainings);
+    public void addTrainingToTable(Training training) {
+        if (!trainingTable.getItems().contains(training)){
+        trainingTable.getItems().add(training);
+        }else{
+            showAlert("","Already added Training");
+        }
     }
 
     private void deleteTraining() {
         Training selectedTraining = trainingTable.getSelectionModel().getSelectedItem();
         if (selectedTraining != null) {
             trainingTable.getItems().remove(selectedTraining);
-        } else {
-            showAlert("Error", "No training selected for deletion.");
         }
     }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AllDocumentsController">
+<Label text="Select a Document" />
+<TableView fx:id="allDocumentsTable">
+    <columns>
+        <TableColumn text="ID">
+            <cellValueFactory>
+                <PropertyValueFactory property="doc_id" />
+            </cellValueFactory>
+        </TableColumn>
+        <TableColumn text="Label">
+            <cellValueFactory>
+                <PropertyValueFactory property="doc_label" />
+            </cellValueFactory>
+        </TableColumn>
+    </columns>
+</TableView>
+<Button text="Select" onAction="#selectDocument" />
+</VBox>

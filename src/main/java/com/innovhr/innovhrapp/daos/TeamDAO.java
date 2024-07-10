@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TeamDAO {
 
-    public void saveTeam(Team team) {
+    public static void saveTeam(Team team) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -38,7 +38,7 @@ public class TeamDAO {
         }
     }
 
-    public void updateTeam(Team team) {
+    public static void updateTeam(Team team) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -52,7 +52,7 @@ public class TeamDAO {
         }
     }
 
-    public void deleteTeam(Team team) {
+    public static void deleteTeam(Team team) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

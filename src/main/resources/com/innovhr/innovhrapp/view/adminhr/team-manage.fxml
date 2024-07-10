@@ -1,10 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.TeamManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.TeamManageController">
+    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Teams Management" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+        <Label text="Selected ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="teamIdField" prefHeight="25.0" prefWidth="102.0" promptText="Team Id" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label text="Label:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="teamLabelField" promptText="Team Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="teamDescriptionField" promptText="Team Description" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <ComboBox fx:id="departmentComboBox" promptText="Select Department" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label text="Team Lead:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <ComboBox fx:id="teamLeadComboBox" promptText="Select Team Lead" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Label text="Manager:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <ComboBox fx:id="managerComboBox" promptText="Select Manager" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    </GridPane>
+    <HBox spacing="10">
+        <Button fx:id="saveButton" text="Save" />
+        <Button fx:id="deleteButton" text="Delete" />
+        <Button fx:id="clearButton" text="Clear" />
+    </HBox>
+    <TableView fx:id="teamTable">
+        <columns>
+            <TableColumn text="ID">
+                <cellValueFactory>
+                    <PropertyValueFactory property="team_id" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Label">
+                <cellValueFactory>
+                    <PropertyValueFactory property="team_label" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Description">
+                <cellValueFactory>
+                    <PropertyValueFactory property="team_description" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Number of Employees">
+                <cellValueFactory>
+                    <PropertyValueFactory property="team_employee_nb" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Department">
+                <cellValueFactory>
+                    <PropertyValueFactory property="department.dep_name" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Team Lead">
+                <cellValueFactory>
+                    <PropertyValueFactory property="teamlead.name" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Manager">
+                <cellValueFactory>
+                    <PropertyValueFactory property="manager.name" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
 </VBox>

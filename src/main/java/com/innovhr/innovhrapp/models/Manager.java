@@ -11,12 +11,12 @@ public class Manager {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "adminhr_id" , nullable = false)
-    private Adminhr adminhr;
-
     @OneToMany(mappedBy = "manager")
     private List<Employee> employees;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     // getters and setters
     public int getId() {
@@ -35,13 +35,7 @@ public class Manager {
         this.name = name;
     }
 
-    public Adminhr getAdminhr() {
-        return adminhr;
-    }
 
-    public void setAdminhr(Adminhr adminhr) {
-        this.adminhr = adminhr;
-    }
 
     public List<Employee> getEmployees() {
         return employees;
@@ -49,5 +43,13 @@ public class Manager {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

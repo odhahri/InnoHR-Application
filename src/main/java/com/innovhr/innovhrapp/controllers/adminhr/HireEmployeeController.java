@@ -2,6 +2,11 @@ package com.innovhr.innovhrapp.controllers.adminhr;
 
 import com.innovhr.innovhrapp.daos.*;
 import com.innovhr.innovhrapp.models.*;
+import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
+import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
+import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -14,7 +19,9 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HireEmployeeController {
+import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
+
+public class HireEmployeeController implements AccessControlled {
 
     @FXML
     private TextField usernameField;
@@ -26,22 +33,40 @@ public class HireEmployeeController {
     private TextField emailField;
     @FXML
     private TextField addressField;
-
     @FXML
     private ComboBox<String> departmentComboBox;
     @FXML
     private ComboBox<String> managerComboBox;
     @FXML
     private ComboBox<String> teamComboBox;
-    @FXML
-    private TableView<String> documentsTable;
-    @FXML
-    private TableView<String> trainingTable;
+
 
     @FXML
     private ImageView imageView;
     private byte[] imageBytes;
+    private final String pageName = "Hire employee page";
+    private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.ADMIN;
+    private final UserNavigationHandler navigationHandler;
 
+    @FXML
+    public void initialize() {
+        populateComboBoxes();
+    }
+    public HireEmployeeController(){
+        this.navigationHandler = new UserNavigationHandler(SessionManager.getInstance());
+    }
+    @Override
+    public void checkAccess() {
+        try {
+            navigationHandler.authorizePageAccess(pageName, ControllerAccessLevel);
+        } catch (UnsupportedOperationException e) {
+            showAlertError("Access Denied", "You do not have permission to view this page.");
+            disableComponents();
+        }
+    }
+    private void disableComponents() {
+        // Disable components to prevent unauthorized interactions
+    }
     @FXML
     private void importImage() {
         FileChooser fileChooser = new FileChooser();
@@ -65,92 +90,72 @@ public class HireEmployeeController {
 
     @FXML
     private void hireEmployee() {
-        if (usernameField.getText().isEmpty()) {
-            showAlert("Error", "Username is required.");
-            return;
-        }
-        if (fnameField.getText().isEmpty()) {
-            showAlert("Error", "First name is required.");
-            return;
-        }
-        if (lnameField.getText().isEmpty()) {
-            showAlert("Error", "Last name is required.");
-            return;
-        }
-        if (emailField.getText().isEmpty()) {
-            showAlert("Error", "Email is required.");
-            return;
-        }
-        if (addressField.getText().isEmpty()) {
-            showAlert("Error", "Address is required.");
-            return;
-        }
-        if (managerComboBox.getValue() == null || managerComboBox.getValue().isEmpty()) {
-            showAlert("Error", "Manager is required.");
-            return;
-        }
-        if (departmentComboBox.getValue() == null || departmentComboBox.getValue().isEmpty()) {
-            showAlert("Error", "Department is required.");
-            return;
-        }
-        if (teamComboBox.getValue() == null || teamComboBox.getValue().isEmpty()) {
-            showAlert("Error", "Team is required.");
-            return;
-        }
-        Employee employee = new Employee();
-        employee.setEmp_username(usernameField.getText());
-        employee.setEmp_fname(fnameField.getText());
-        employee.setEmp_lname(lnameField.getText());
-        employee.setEmp_email(emailField.getText());
-        employee.setEmp_address(addressField.getText());
-        String[] managerData = managerComboBox.getValue().split(" \\| ");
-        int managerId = Integer.parseInt(managerData[0]);
-        Manager selectedManager = ManagerDAO.findManagerById(managerId);
-        employee.setManager(selectedManager);
-        // Retrieve the selected department and team
-        String[] departmentData = departmentComboBox.getValue().split(" \\| ");
-        int departmentId = Integer.parseInt(departmentData[0]);
-        Department selectedDepartment = DepartmentDAO.findDepartmentById(departmentId);
+        try {
+            String username = usernameField.getText();
+            String firstName = fnameField.getText();
+            String lastName = lnameField.getText();
+            String email = emailField.getText();
+            String address = addressField.getText();
 
-        String[] teamData = teamComboBox.getValue().split(" \\| ");
-        int teamId = Integer.parseInt(teamData[0]);
-        Team selectedTeam = TeamDAO.findTeamById(teamId);
+            if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || address.isEmpty()) {
+                showAlert("Error", "All fields are required.");
+                return;
+            }
 
-        employee.setDepartment(selectedDepartment);
-        employee.setTeam(selectedTeam);
+            String managerString = managerComboBox.getValue();
+            String departmentString = departmentComboBox.getValue();
+            String teamString = teamComboBox.getValue();
 
-        // Update documents
-        List<Document> updatedDocuments = documentsTable.getItems().stream()
-                .map(docLabel -> {
-                    String[] docData = docLabel.split(" \\| ");
-                    int docId = Integer.parseInt(docData[0]);
-                    return DocumentDAO.findDocumentById(docId);
-                })
-                .collect(Collectors.toList());
-        employee.setDocuments(updatedDocuments);
+            if (departmentString == null ) {
+                showAlert("Error", "Department must be selected.");
+                return;
+            }
+            int departmentId = Integer.parseInt(departmentString.split(" \\| ")[0]);
 
-        // Update trainings
-        List<Training> updatedTrainings = trainingTable.getItems().stream()
-                .map(trainLabel -> {
-                    String[] trainData = trainLabel.split(" \\| ");
-                    int trainId = Integer.parseInt(trainData[0]);
-                    return TrainingDAO.findTrainingById(trainId);
-                })
-                .collect(Collectors.toList());
-        employee.setTrainings(updatedTrainings);
-        // Update image if necessary
-        employee.setEmp_image(imageBytes);
 
-        EmployeeDAO.saveEmployee(employee);
-        employee = EmployeeDAO.findEmployeeByUsername(usernameField.getText());
-        //Creating user for this employee
-        User employeeUser = new User();
-        employeeUser.setPersonId(employee.getEmp_id());
-        employeeUser.setUsername(employee.getEmp_username());
-        employeeUser.setAccessLevel(User.AccessLevel.COLLAB);
-        employeeUser.setPassword(employee.getEmp_username()+"innovhr");
-        UserDAO.saveUser(employeeUser);
-        showAlert("Employee Hired", "New employee hired successfully");
+
+
+
+
+            Department department = DepartmentDAO.findDepartmentById(departmentId);
+
+            if (department == null) {
+                showAlert("Error", "Invalid Manager, Department, or Team selection.");
+                return;
+            }
+
+            Employee employee = new Employee();;
+            // Extract IDs from ComboBox values
+            if (managerString !=null ){
+                int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
+                Manager manager = ManagerDAO.findManagerById(managerId);
+                employee.setManager(manager);
+            }
+            if (teamString!=null){
+                int teamId = Integer.parseInt(teamString.split(" \\| ")[0]);
+                Team team = TeamDAO.findTeamById(teamId);
+                employee.setTeam(team);
+            }
+            employee.setEmp_username(username);
+            employee.setEmp_fname(firstName);
+            employee.setEmp_lname(lastName);
+            employee.setEmp_email(email);
+            employee.setEmp_address(address);
+            employee.setDepartment(department);
+            employee.setEmp_phone("3453453");
+
+            if (imageBytes != null ) {
+                employee.setEmp_image(imageBytes);
+            }
+
+            EmployeeDAO.saveEmployee(employee);
+
+            showAlert("Success", "Employee hired successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to hire employee. Please try again.");
+        }
     }
 
     private void showAlert(String title, String message) {
@@ -158,5 +163,36 @@ public class HireEmployeeController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    private void populateComboBoxes() {
+        // Populate managerComboBox with data from the database
+        List<String> managers = ManagerDAO.findAllManagers().stream()
+                .map(manager -> manager.getId() + " | " + manager.getName())
+                .collect(Collectors.toList());
+
+        if (managers.isEmpty()) {
+            managers = List.of("No managers exist");
+        }
+        managerComboBox.setItems(FXCollections.observableArrayList(managers));
+
+        // Populate departmentComboBox with data from the database
+        List<String> departments = DepartmentDAO.findAllDepartments().stream()
+                .map(department -> department.getDep_id() + " | " + department.getDep_name())
+                .collect(Collectors.toList());
+
+        if (departments.isEmpty()) {
+            departments = List.of("No departments exist");
+        }
+        departmentComboBox.setItems(FXCollections.observableArrayList(departments));
+
+        // Populate teamComboBox with data from the database
+        List<String> teams = TeamDAO.findAllTeams().stream()
+                .map(team -> team.getTeam_id() + " | " + team.getTeam_label())
+                .collect(Collectors.toList());
+
+        if (teams.isEmpty()) {
+            teams = List.of("No teams exist");
+        }
+        teamComboBox.setItems(FXCollections.observableArrayList(teams));
     }
 }

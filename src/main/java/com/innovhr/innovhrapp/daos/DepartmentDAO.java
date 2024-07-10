@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DepartmentDAO {
 
-    public void saveDepartment(Department department) {
+    public static void saveDepartment(Department department) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -37,7 +37,7 @@ public class DepartmentDAO {
         }
     }
 
-    public void updateDepartment(Department department) {
+    public static void updateDepartment(Department department) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -51,7 +51,7 @@ public class DepartmentDAO {
         }
     }
 
-    public void deleteDepartment(Department department) {
+    public static void deleteDepartment(Department department) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

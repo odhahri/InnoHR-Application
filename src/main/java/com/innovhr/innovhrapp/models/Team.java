@@ -12,19 +12,23 @@ public class Team {
     private String team_label;
     @Column(nullable = false)
     private String team_description;
-    @Column(nullable = false)
-    private int team_employee_nb;
+
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+    @ManyToOne
+    @JoinColumn(name = "manager_id", nullable = false)
+    private Manager manager;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "team")
     private List<Employee> employees;
 
-    @ManyToOne
-    @JoinColumn(name = "teamlead_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teamlead_id", nullable = true)
     private Teamlead teamlead;
+
+
 
     // getters and setters
     public int getTeam_id() {
@@ -51,13 +55,6 @@ public class Team {
         this.team_description = team_description;
     }
 
-    public int getTeam_employee_nb() {
-        return team_employee_nb;
-    }
-
-    public void setTeam_employee_nb(int team_employee_nb) {
-        this.team_employee_nb = team_employee_nb;
-    }
 
     public Department getDepartment() {
         return department;
@@ -81,5 +78,14 @@ public class Team {
 
     public void setTeamlead(Teamlead teamlead) {
         this.teamlead = teamlead;
+    }
+
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 }

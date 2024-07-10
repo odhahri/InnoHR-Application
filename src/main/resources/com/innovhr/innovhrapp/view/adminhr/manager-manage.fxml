@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.ManagerManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
 
+<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.ManagerManageController">
+    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Managers Management" />
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+        <Label text="Selected ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="managerIdField" prefHeight="25.0" prefWidth="102.0" promptText="Manager Id" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="managerNameField" promptText="Manager Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <ComboBox fx:id="departmentComboBox" promptText="Select Department" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    </GridPane>
+    <HBox spacing="10">
+        <Button fx:id="saveButton" text="Save" />
+        <Button fx:id="deleteButton" text="Delete" />
+        <Button fx:id="clearButton" text="Clear" />
+    </HBox>
+    <TableView fx:id="managerTable">
+        <columns>
+            <TableColumn text="ID">
+                <cellValueFactory>
+                    <PropertyValueFactory property="id" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Name">
+                <cellValueFactory>
+                    <PropertyValueFactory property="name" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Department">
+                <cellValueFactory>
+                    <PropertyValueFactory property="department.dep_name" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
 </VBox>

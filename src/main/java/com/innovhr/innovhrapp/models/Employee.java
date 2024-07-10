@@ -8,13 +8,13 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int emp_id;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String emp_phone;
     @Column(nullable = false)
     private String emp_email;
     @Column(nullable = false)
     private String emp_address;
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Lob
     private byte[] emp_image;
     @Column(nullable = false)
@@ -23,11 +23,11 @@ public class Employee {
     private String emp_lname;
     @Column(unique = true, nullable = false)
     private String emp_username;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String emp_description;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
+    @JoinColumn(name = "manager_id", nullable = true)
     private Manager manager;
 
     @ManyToOne
@@ -35,7 +35,7 @@ public class Employee {
     private Department department;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "team_id", nullable = true)
     private Team team;
 
     @OneToMany(mappedBy = "employee")
@@ -47,14 +47,14 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<Request> requests;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_document",
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "document_id")
     )
     private List<Document> documents;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_training",
             joinColumns = @JoinColumn(name = "employee_id"),
@@ -62,7 +62,7 @@ public class Employee {
     )
     private List<Training> trainings;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "employee_holiday",
             joinColumns = @JoinColumn(name = "employee_id"),

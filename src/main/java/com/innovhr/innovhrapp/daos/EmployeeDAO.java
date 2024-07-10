@@ -14,7 +14,7 @@ public class EmployeeDAO {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(employee); // Using persist instead of save
+            session.save(employee); // Using persist instead of save
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="innovhr@localhost" uuid="c24786b6-8fa2-45b6-9299-34c7f493412c">
+    <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="242fe87f-c12e-49e6-96c1-0bc68dc6e14e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate
+
+C:/DEV/Projects/innovhr/src/main/resources/hibernate.cfg.xml</remarks>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:54320/innovhr</jdbc-url>
       <jdbc-additional-properties>

@@ -15,9 +15,7 @@
         <ComboBox fx:id="managerComboBox" promptText="Manager" />
         <ComboBox fx:id="departmentComboBox" promptText="Department" />
         <ComboBox fx:id="teamComboBox" promptText="Team" />
-        <TableView fx:id="documentsTable" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="118.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-        <TableView fx:id="trainingTable" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="79.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-        <ImageView fx:id="imageView" fitHeight="99.0" fitWidth="164.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="3">
+       <ImageView fx:id="imageView" fitHeight="99.0" fitWidth="164.0" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.rowSpan="3">
             <image>
                 <Image url="@../../../../../hrimageback.jpg" />
             </image>

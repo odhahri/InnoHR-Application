@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ManagerDAO {
 
-    public void saveManager(Manager manager) {
+    public static void saveManager(Manager manager) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -37,7 +37,7 @@ public class ManagerDAO {
         }
     }
 
-    public void updateManager(Manager manager) {
+    public static void updateManager(Manager manager) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -51,7 +51,7 @@ public class ManagerDAO {
         }
     }
 
-    public void deleteManager(Manager manager) {
+    public static void deleteManager(Manager manager) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();

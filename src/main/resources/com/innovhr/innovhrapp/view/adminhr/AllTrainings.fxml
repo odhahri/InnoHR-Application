@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AllTrainingsController">
+    <Label text="Select a Training" />
+    <TableView fx:id="allTrainingsTable">
+        <columns>
+            <TableColumn text="Label">
+                <cellValueFactory>
+                    <PropertyValueFactory property="train_label" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Chapters">
+                <cellValueFactory>
+                    <PropertyValueFactory property="train_chapters" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+    <Button text="Select" onAction="#selectTraining" />
+</VBox>
