@@ -22,8 +22,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccessLevel accessLevel;
-    @Column(unique = true, nullable = false)
-    private int personId;
+    @OneToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     // Getters and setters
 
@@ -65,13 +66,14 @@ public class User {
         return Integer.toHexString(password.hashCode());
     }
 
-    public int getPersonId() {
-        return personId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
+
 
     public enum AccessLevel {
         ADMIN, MANAGER, TEAMLEAD, COLLAB;

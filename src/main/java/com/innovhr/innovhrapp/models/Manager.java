@@ -17,7 +17,9 @@ public class Manager {
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
-
+    @OneToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
     // getters and setters
     public int getId() {
         return id;
@@ -51,5 +53,13 @@ public class Manager {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

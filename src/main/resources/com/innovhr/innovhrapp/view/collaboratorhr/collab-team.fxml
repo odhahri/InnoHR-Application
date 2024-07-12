@@ -3,6 +3,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="800.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.collabhr.MyTeamController">
-
+<ScrollPane style="-fx-background-color:transparent;" fitToHeight="true" fitToWidth="true" prefHeight="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.collabhr.MyTeamController">
+    <content>
+        <VBox fillWidth="false" prefWidth="1000.0" spacing="20.0" VBox.vgrow="ALWAYS">
+  <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Team Information" />
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Team Label:" />
+        <Label fx:id="teamLabel" style="-fx-font-size: 18px;" />
+    </HBox>
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Team Description:" />
+        <Label fx:id="teamDescription" style="-fx-font-size: 18px;" wrapText="true" maxWidth="500.0" />
+    </HBox>
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Manager:" />
+        <Label fx:id="teamManager" style="-fx-font-size: 18px;" />
+    </HBox>
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Team Leader:" />
+        <Label fx:id="teamLeader" style="-fx-font-size: 18px;" />
+    </HBox>
+    <HBox spacing="20" alignment="CENTER">
+         <Label text="Department:" />
+         <Label fx:id="department" style="-fx-font-size: 18px;" />
+    </HBox>
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Team Members:" />
+        <ListView fx:id="teamMembers" style="-fx-font-size: 14px;" prefHeight="200.0" prefWidth="400.0" />
+    </HBox>
 </VBox>
+    </content>
+</ScrollPane>

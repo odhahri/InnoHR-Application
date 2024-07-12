@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.RequestManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
-
+<?import javafx.scene.layout.HBox?>
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.RequestManageController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <Label fx:id="pageTitle" text="Request Approval" style="-fx-font-size: 24px;"/>
+    <TableView fx:id="requestsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="requestTypeColumn" text="Type" prefWidth="150"/>
+            <TableColumn fx:id="requestLabelColumn" text="Label" prefWidth="200"/>
+            <TableColumn fx:id="requestStateColumn" text="State" prefWidth="150"/>
+            <TableColumn fx:id="requestDescriptionColumn" text="Description" prefWidth="200"/>
+        </columns>
+    </TableView>
+    <HBox spacing="10">
+        <Button fx:id="approveButton" text="Approve"/>
+        <Button fx:id="refuseButton" text="Refuse"/>
+    </HBox>
 </VBox>

@@ -1,6 +1,6 @@
 package com.innovhr.innovhrapp.daos;
 
-import com.innovhr.innovhrapp.models.Training;
+import com.innovhr.innovhrapp.models.Repayment;
 import com.innovhr.innovhrapp.utils.database.BDConnectivity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,13 +8,13 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class TrainingDAO {
+public class RepaymentDAO {
 
-    public static void saveTraining(Training training) {
+    public static void saveRepayment(Repayment repayment) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(training);
+            session.save(repayment);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -24,24 +24,24 @@ public class TrainingDAO {
         }
     }
 
-    public static Training findTrainingById(int id) {
+    public static Repayment findRepaymentById(int id) {
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
-            return session.get(Training.class, id);
+            return session.get(Repayment.class, id);
         }
     }
 
-    public static List<Training> findAllTrainings() {
+    public static List<Repayment> findAllRepayments() {
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
-            Query<Training> query = session.createQuery("from Training", Training.class);
+            Query<Repayment> query = session.createQuery("from Repayment", Repayment.class);
             return query.list();
         }
     }
 
-    public void updateTraining(Training training) {
+    public static void updateRepayment(Repayment repayment) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.update(training);
+            session.merge(repayment);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -51,11 +51,11 @@ public class TrainingDAO {
         }
     }
 
-    public static void deleteTraining(Training training) {
+    public static void deleteRepayment(Repayment repayment) {
         Transaction transaction = null;
         try (Session session = BDConnectivity.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.delete(training);
+            session.remove(repayment);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

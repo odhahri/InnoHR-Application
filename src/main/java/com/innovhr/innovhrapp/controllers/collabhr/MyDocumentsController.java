@@ -1,7 +1,7 @@
 package com.innovhr.innovhrapp.controllers.collabhr;
 
+import com.innovhr.innovhrapp.models.Document;
 import com.innovhr.innovhrapp.models.Employee;
-import com.innovhr.innovhrapp.models.Training;
 import com.innovhr.innovhrapp.models.User;
 import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
 import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
@@ -21,32 +21,28 @@ import java.util.List;
 
 import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
 
-public class MyTrainingsController implements AccessControlled {
+public class MyDocumentsController implements AccessControlled {
 
     @FXML
     private Label pageTitle;
     @FXML
-    private TableView<Training> trainingsTable;
+    private TableView<Document> documentsTable;
     @FXML
-    private TableColumn<Training, Integer> trainIdColumn;
+    private TableColumn<Document, Integer> docIdColumn;
     @FXML
-    private TableColumn<Training, String> trainLabelColumn;
+    private TableColumn<Document, String> docLabelColumn;
     @FXML
-    private TableColumn<Training, String> trainDescriptionColumn;
+    private TableColumn<Document, String> docDescriptionColumn;
     @FXML
-    private TableColumn<Training, Integer> trainChaptersColumn;
+    private TableColumn<Document, String> docTypeColumn;
     @FXML
-    private TableColumn<Training, Integer> trainLengthColumn;
-    @FXML
-    private TableColumn<Training, String> trainImageColumn;
-    @FXML
-    private TableColumn<Training, Integer> trainFinishedNbColumn;
+    private TableColumn<Document, String> docCreatedDateColumn;
 
-    private final String pageName = "My Trainings";
+    private final String pageName = "My Documents";
     private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.COLLAB;
     private final UserNavigationHandler navigationHandler;
 
-    public MyTrainingsController() {
+    public MyDocumentsController() {
         this.navigationHandler = new UserNavigationHandler(SessionManager.getInstance());
     }
 
@@ -61,32 +57,32 @@ public class MyTrainingsController implements AccessControlled {
     }
 
     private void disableComponents() {
-        trainingsTable.setDisable(true);
+        documentsTable.setDisable(true);
     }
 
     @FXML
     public void initialize() {
-        pageTitle.setText("My Trainings");
+        pageTitle.setText("My Documents");
         initializeColumns();
-        loadTrainings();
+        loadDocuments();
 
-        trainingsTable.setOnMouseClicked(event -> {
+        documentsTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Training selectedTraining = trainingsTable.getSelectionModel().getSelectedItem();
-                if (selectedTraining != null) {
-                    saveAndOpenDocument(selectedTraining);
+                Document selectedDocument = documentsTable.getSelectionModel().getSelectedItem();
+                if (selectedDocument != null) {
+                    saveAndOpenDocument(selectedDocument);
                 }
             }
         });
     }
 
-    private void saveAndOpenDocument(Training training) {
+    private void saveAndOpenDocument(Document document) {
         try {
-            File tempFile = File.createTempFile(training.getTrain_label(), ".mp4" );
+            File tempFile = File.createTempFile(document.getDoc_label(), "." + document.getDoc_type());
             tempFile.deleteOnExit();
 
             try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                fos.write(training.getContent());
+                fos.write(document.getContent());
             }
 
             if (Desktop.isDesktopSupported()) {
@@ -101,20 +97,15 @@ public class MyTrainingsController implements AccessControlled {
     }
 
     private void initializeColumns() {
-        trainIdColumn.setCellValueFactory(new PropertyValueFactory<>("train_id"));
-        trainLabelColumn.setCellValueFactory(new PropertyValueFactory<>("train_label"));
-        trainDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("train_description"));
-        trainChaptersColumn.setCellValueFactory(new PropertyValueFactory<>("train_chapters"));
-        trainLengthColumn.setCellValueFactory(new PropertyValueFactory<>("train_length"));
-        trainImageColumn.setCellValueFactory(new PropertyValueFactory<>("train_image"));
-        trainFinishedNbColumn.setCellValueFactory(new PropertyValueFactory<>("train_finished_nb"));
+        docLabelColumn.setCellValueFactory(new PropertyValueFactory<>("doc_label"));
+        docTypeColumn.setCellValueFactory(new PropertyValueFactory<>("doc_type"));
     }
 
-    private void loadTrainings() {
+    private void loadDocuments() {
         Employee employee = SessionManager.getInstance().getLoggedInUser().getEmployee();
-        List<Training> trainingList = employee.getTrainings();
-        ObservableList<Training> trainings = FXCollections.observableArrayList(trainingList);
-        trainingsTable.setItems(trainings);
+        List<Document> documentList = employee.getDocuments();
+        ObservableList<Document> documents = FXCollections.observableArrayList(documentList);
+        documentsTable.setItems(documents);
     }
 
     private void showAlert(String title, String message) {

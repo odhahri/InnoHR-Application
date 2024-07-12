@@ -10,18 +10,20 @@ public class Training {
     private int train_id;
     @Column(nullable = false)
     private String train_label;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String train_description;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int train_chapters;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int train_length;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String train_image;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int train_finished_nb;
 
-
+    @Lob
+    @Column(nullable = false)
+    private byte[] content;
 
     @ManyToMany(mappedBy = "trainings")
     private List<Employee> employees;
@@ -90,5 +92,13 @@ public class Training {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }

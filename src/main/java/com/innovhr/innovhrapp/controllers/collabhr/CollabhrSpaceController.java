@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
@@ -20,6 +21,8 @@ public class CollabhrSpaceController implements AccessControlled {
     private final String pageName = "CollabhrSpace";
     private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.COLLAB;
 
+    @FXML
+    private HBox CollabSpaceHBOX;
     @FXML
     private ListView<String> menuListView;
 
@@ -37,6 +40,10 @@ public class CollabhrSpaceController implements AccessControlled {
         checkAccess();
         // Populate menu items
         menuListView.getItems().addAll("My Infos", "Personal Documents", "Documents", "Requests", "Team", "Team Plan", "Trainings");
+        if (SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.ADMIN) || SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.MANAGER)) {
+            menuListView.getItems().add("Spaces");
+        }
+        menuListView.getItems().add("Disconnect");
         menuListView.setCellFactory(listView -> new CustomCellFactory());
         menuListView.getSelectionModel().select("My Infos");
         String fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_infos_path;
@@ -44,12 +51,12 @@ public class CollabhrSpaceController implements AccessControlled {
     }
 
     @FXML
-    public void handleMenuClick(MouseEvent event) {
+    public void handleMenuClick(MouseEvent event) throws IOException {
         String selectedItem = menuListView.getSelectionModel().getSelectedItem();
         String fxmlFile = "";
 
         switch (selectedItem) {
-            case "Infos":
+            case "My Infos":
                 fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_infos_path;
                 break;
             case "Personal Documents":
@@ -70,7 +77,20 @@ public class CollabhrSpaceController implements AccessControlled {
             case "Trainings":
                 fxmlFile = ViewPresets.CollabFxmlViews.fxml_collab_trains_path;
                 break;
-
+            case "Spaces":
+                if (SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.ADMIN)){
+                    FXMLViewLoader.loadScene("Continue as", ViewPresets.SharedFXMLViews.fxml_continue_as_path );
+                    FXMLViewLoader.closeScene(CollabSpaceHBOX);
+                }
+                if (SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.MANAGER)){
+                    FXMLViewLoader.loadScene("Continue as", ViewPresets.SharedFXMLViews.fxml_continue_as_path );
+                    FXMLViewLoader.closeScene(CollabSpaceHBOX);
+                }
+                break;
+            case "Disconnect":
+                SessionManager.getInstance().logout();
+                FXMLViewLoader.closeScene(CollabSpaceHBOX);
+                break;
             default:
                 // Handle default case if needed
                 break;

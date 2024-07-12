@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
@@ -19,7 +20,8 @@ import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
 public class AdminhrSpaceController implements AccessControlled {
     private final String pageName = "AdminhrSpace";
     private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.ADMIN;
-
+    @FXML
+    private HBox AdminSpaceHBOX;
     @FXML
     private ListView<String> menuListView;
 
@@ -37,6 +39,11 @@ public class AdminhrSpaceController implements AccessControlled {
         checkAccess();
         // Populate menu items
         menuListView.getItems().addAll("Employees", "Departments", "Manager", "Teams", "Documents", "Trainings", "Requests","Salaries");
+        if(SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.ADMIN) || SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.MANAGER)) {
+            menuListView.getItems().add("Spaces");
+        }
+        menuListView.getItems().add("Disconnect");
+
         menuListView.setCellFactory(listView -> new CustomCellFactory());
         menuListView.getSelectionModel().select("Employees");
         String fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_employee_path;
@@ -44,7 +51,7 @@ public class AdminhrSpaceController implements AccessControlled {
     }
 
     @FXML
-    public void handleMenuClick(MouseEvent event) {
+    public void handleMenuClick(MouseEvent event) throws IOException {
         String selectedItem = menuListView.getSelectionModel().getSelectedItem();
         String fxmlFile = "";
 
@@ -72,6 +79,16 @@ public class AdminhrSpaceController implements AccessControlled {
                 break;
             case "Salaries":
                 fxmlFile = ViewPresets.AdminFxmlViews.fxml_admin_salaries_path;
+                break;
+            case "Spaces":
+                if (SessionManager.getInstance().getLoggedInUser().getAccessLevel().equals(User.AccessLevel.ADMIN)){
+                    FXMLViewLoader.loadScene("Continue as", ViewPresets.SharedFXMLViews.fxml_continue_as_path );
+                    FXMLViewLoader.closeScene(AdminSpaceHBOX);
+                }
+                break;
+            case "Disconnect":
+                SessionManager.getInstance().logout();
+                FXMLViewLoader.closeScene(AdminSpaceHBOX);
                 break;
             default:
                 // Handle default case if needed

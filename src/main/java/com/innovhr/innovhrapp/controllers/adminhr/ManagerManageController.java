@@ -1,8 +1,11 @@
 package com.innovhr.innovhrapp.controllers.adminhr;
 
 import com.innovhr.innovhrapp.daos.DepartmentDAO;
+import com.innovhr.innovhrapp.daos.EmployeeDAO;
 import com.innovhr.innovhrapp.daos.ManagerDAO;
+import com.innovhr.innovhrapp.daos.UserDAO;
 import com.innovhr.innovhrapp.models.Department;
+import com.innovhr.innovhrapp.models.Employee;
 import com.innovhr.innovhrapp.models.Manager;
 import com.innovhr.innovhrapp.models.User;
 import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
@@ -141,10 +144,30 @@ public class ManagerManageController implements AccessControlled {
             Manager manager;
             if (managerIdField.getText().isEmpty()) {
                 // New manager
-                manager = new Manager();
-                manager.setName(name);
-                manager.setDepartment(department);
-                ManagerDAO.saveManager(manager);
+
+                // We start creating employee associated to the manager
+                try {
+                    Employee employee = new Employee();
+                    employee.setEmp_username(name);
+                    employee.setDepartment(department);
+                    employee.setManager(null);
+                    employee.setTeam(null);
+                    EmployeeDAO.saveEmployee(employee);
+                    employee = EmployeeDAO.findEmployeeByUsername(employee.getEmp_username());
+                    manager = new Manager();
+                    manager.setName(name);
+                    manager.setDepartment(department);
+                    manager.setEmployee(employee);
+                    ManagerDAO.saveManager(manager);
+                    User user = new User();
+                    user.setEmployee(employee);
+                    user.setAccessLevel(User.AccessLevel.MANAGER);
+                    user.setUsername(name);
+                    user.setPassword(name+"-InnovhrManager");
+                    UserDAO.saveUser(user);
+                }catch (Exception e) {
+                    AlertUtils.showAlertError("Error", e.getMessage());
+                }
                 AlertUtils.showAlertSuccess("Success", "Manager added successfully.");
             } else {
                 // Existing manager
@@ -154,11 +177,19 @@ public class ManagerManageController implements AccessControlled {
                     AlertUtils.showAlertError("Error", "Manager not found.");
                     return;
                 }
+                try{
+                    Employee employee = manager.getEmployee();
+                    employee.setEmp_username(name);
+                    employee.setDepartment(department);
+                    EmployeeDAO.saveEmployee(employee);
+                    manager.setName(name);
+                    manager.setDepartment(department);
+                    ManagerDAO.updateManager(manager);
+                    AlertUtils.showAlertSuccess("Success", "Manager updated successfully.");
+                }catch (Exception e) {
+                    AlertUtils.showAlertError("Error", e.getMessage());
+                }
 
-                manager.setName(name);
-                manager.setDepartment(department);
-                ManagerDAO.updateManager(manager);
-                AlertUtils.showAlertSuccess("Success", "Manager updated successfully.");
             }
 
             loadManagers();

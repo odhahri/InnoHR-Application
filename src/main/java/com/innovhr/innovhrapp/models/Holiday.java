@@ -15,11 +15,11 @@ public class Holiday {
     private Date holiday_start_date;
     @Column(nullable = false)
     private Date holiday_end_date;
-    @OneToMany(mappedBy = "holiday")
+    @OneToMany(mappedBy = "holiday", fetch = FetchType.EAGER)
     private List<Request> requests;
-
-    @ManyToMany(mappedBy = "holidays")
-    private List<Employee> employees;
+    @ManyToOne
+    @JoinColumn(name = "emp_id", nullable = false)
+    private Employee employee;
 
     // getters and setters
     public int getHoliday_id() {
@@ -62,11 +62,14 @@ public class Holiday {
         this.requests = requests;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+
+
+
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 }

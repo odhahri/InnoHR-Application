@@ -73,7 +73,7 @@ public class LoginController {
 //            stage.show();
             FXMLViewLoader.loadScene("Continue as", ViewPresets.SharedFXMLViews.fxml_continue_as_path );
             // Close the login window
-            FXMLViewLoader.closeScene(loginBox);
+            //FXMLViewLoader.closeScene(loginBox);
         } catch (IOException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Navigation Error", "Failed to load the main application: " + e.getMessage());

@@ -2,6 +2,7 @@ package com.innovhr.innovhrapp.controllers.adminhr;
 
 import com.innovhr.innovhrapp.daos.*;
 import com.innovhr.innovhrapp.models.*;
+import com.innovhr.innovhrapp.utils.component.AlertUtils;
 import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
 import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
 import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.innovhr.innovhrapp.utils.component.AlertUtils.showAlertError;
@@ -158,6 +160,18 @@ public class EmployeeManageController implements AccessControlled {
         if (employee != null) {
             populateEmployeeData(employee);
             setFieldsDisabled(false);
+            boolean isAdminhr = (AdminhrDAO.findAdminhrByEmployee(employee)) != null;
+            boolean isManager = (ManagerDAO.findManagerByEmployee(employee)) != null;
+            if (isManager) {
+                managerComboBox.setDisable(true);
+                teamComboBox.setDisable(true);
+                pageTitle.setText("This employee is a HR Manager");
+            }
+            if (isAdminhr) {
+                managerComboBox.setDisable(true);
+                teamComboBox.setDisable(true);
+                pageTitle.setText("This employee is a HR Admin");
+            }
         } else {
             showAlert("Employee not found", "No employee found with username: " + username);
             setFieldsDisabled(true);
@@ -267,19 +281,34 @@ public class EmployeeManageController implements AccessControlled {
             showAlert("Error", "Employee ID is required.");
             return;
         } else {
-            int employeeId = Integer.parseInt(empIdField.getText());
-            Employee employee = EmployeeDAO.findEmployeeById(employeeId);
-            if (employee != null) {
-                EmployeeDAO.deleteEmployee(employee);
-                showAlert("Employee discharged", "Employee discharged successfully");
-                setFieldsDisabled(true);
-            } else {
-                showAlert("Employee not found", "No employee found with employeeId: " + employeeId);
+            try
+            {
+                int employeeId = Integer.parseInt(empIdField.getText());
+                Employee employee = EmployeeDAO.findEmployeeById(employeeId);
+                if (employee != null) {
+                    boolean isAdminhr = (AdminhrDAO.findAdminhrByEmployee(employee)) != null;
+                    boolean isManager = (ManagerDAO.findManagerByEmployee(employee)) != null;
+                   if (isManager) {
+                        ManagerDAO.deleteManager(ManagerDAO.findManagerByEmployee(employee));
+                    }
+                    if (isAdminhr) {
+                        AdminhrDAO.deleteAdminhr(AdminhrDAO.findAdminhrByEmployee(employee));
+                    }
+                    EmployeeDAO.deleteEmployee(employee);
+                    showAlert("Employee discharged", "Employee discharged successfully");
+                    setFieldsDisabled(true);
+                } else {
+                    showAlert("Employee not found", "No employee found with employeeId: " + employeeId);
+                }
+            }catch (Exception e) {
+                AlertUtils.showAlertSuccess("Error", "Failed to discharge employee. ");
             }
+
         }
     }
 
     private void populateEmployeeData(Employee employee) {
+
         empIdField.setText(String.valueOf(employee.getEmp_id()));
         usernameField.setText(employee.getEmp_username());
         fnameField.setText(employee.getEmp_fname());
@@ -289,7 +318,9 @@ public class EmployeeManageController implements AccessControlled {
         if (employee.getManager() != null){
             managerComboBox.setValue(employee.getManager().getId() + " | " + employee.getManager().getName());
         }
-        departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
+        if (employee.getDepartment() != null){
+            departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
+        }
         if (employee.getTeam() != null) {
             teamComboBox.setValue(employee.getTeam().getTeam_id() + " | " + employee.getTeam().getTeam_label());
         }
@@ -361,6 +392,7 @@ public class EmployeeManageController implements AccessControlled {
 
         TableColumn<Document, String> docLabelColumn = new TableColumn<>("Label");
         docLabelColumn.setCellValueFactory(new PropertyValueFactory<>("doc_label"));
+
 
         documentsTable.getColumns().setAll(docIdColumn, docLabelColumn);
 

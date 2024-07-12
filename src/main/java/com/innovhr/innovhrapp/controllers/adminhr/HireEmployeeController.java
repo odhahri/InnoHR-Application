@@ -151,9 +151,9 @@ public class HireEmployeeController implements AccessControlled {
             EmployeeDAO.saveEmployee(employee);
             User employeeUser = new User();
             employeeUser.setUsername(employee.getEmp_username());
-            employeeUser.setPassword(employee.getEmp_username()+"-innovhr");
+            employeeUser.setPassword(employee.getEmp_username()+"-InnovhrCollab");
             employeeUser.setAccessLevel(User.AccessLevel.COLLAB);
-            employeeUser.setPersonId(EmployeeDAO.findEmployeeByUsername(employee.getEmp_username()).getEmp_id());
+            employeeUser.setEmployee(EmployeeDAO.findEmployeeByUsername(employee.getEmp_username()));
             UserDAO.saveUser(employeeUser);
             showAlert("Success", "Employee hired successfully.");
 

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox spacing="20" styleClass="vbox" stylesheets="/styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AdminhrSpaceController" HBox.hgrow="ALWAYS">
+<HBox fx:id="AdminSpaceHBOX" spacing="20" styleClass="vbox" stylesheets="/styles/style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.AdminhrSpaceController" HBox.hgrow="ALWAYS">
     <!-- Left Menu -->
     <VBox fx:id="menuContainer" styleClass="menu-container" VBox.vgrow="ALWAYS">
         <ListView fx:id="menuListView" onMouseClicked="#handleMenuClick" styleClass="menu-list-view" VBox.vgrow="ALWAYS" />

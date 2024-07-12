@@ -4,8 +4,10 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.ManagerManageController">
-    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Managers Management" />
+<ScrollPane style="-fx-background-color:transparent;" fitToHeight="true" fitToWidth="true" prefHeight="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.ManagerManageController">
+    <content>
+        <VBox fillWidth="false" prefWidth="1000.0" spacing="20.0" VBox.vgrow="ALWAYS">
+        <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Managers Management" />
     <GridPane hgap="10" vgap="10">
         <columnConstraints>
             <ColumnConstraints halignment="RIGHT" />
@@ -48,3 +50,5 @@
         </columns>
     </TableView>
 </VBox>
+    </content>
+</ScrollPane>

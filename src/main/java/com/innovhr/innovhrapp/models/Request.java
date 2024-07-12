@@ -9,7 +9,7 @@ public class Request {
     private int request_id;
     @Column(nullable = false)
     private String request_type;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String request_description;
     @Column(nullable = false)
     private String request_label;

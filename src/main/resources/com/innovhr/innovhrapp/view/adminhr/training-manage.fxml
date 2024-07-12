@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.innovhr.innovhrapp.controllers.adminhr.TrainingManageController"
-      alignment="CENTER" spacing="20.0">
-    <Label fx:id="pageTitle"  style="-fx-font-size: 24px;" />
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-</VBox>
+<ScrollPane style="-fx-background-color:transparent;" fitToHeight="true" fitToWidth="true" prefHeight="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.TrainingManageController">
+    <content>
+        <VBox fillWidth="false" prefWidth="1000.0" spacing="20.0" VBox.vgrow="ALWAYS">
+            <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Training Management" />
+
+            <TableView fx:id="trainingsTable" prefHeight="500.0" prefWidth="600.0">
+                <columns>
+                    <TableColumn fx:id="trainIdColumn" text="ID" />
+                    <TableColumn fx:id="trainLabelColumn" text="Label" />
+                    <TableColumn fx:id="trainDescriptionColumn" text="Description" />
+                    <TableColumn fx:id="trainChaptersColumn" text="Chapters" />
+                    <TableColumn fx:id="trainLengthColumn" text="Length" />
+                    <TableColumn fx:id="trainImageColumn" text="Image" />
+                    <TableColumn fx:id="trainFinishedNbColumn" text="Finished Number" />
+                </columns>
+            </TableView>
+
+            <HBox spacing="10">
+                <Button fx:id="addTrainingButton" text="Add Training" />
+                <Button fx:id="deleteTrainingButton" text="Delete Training" />
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

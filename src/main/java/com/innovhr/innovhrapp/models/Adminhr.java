@@ -10,7 +10,9 @@ public class Adminhr {
     private int id;
     @Column(nullable = false)
     private String name;
-
+    @OneToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     // getters and setters
     public int getId() {
@@ -29,4 +31,11 @@ public class Adminhr {
         this.name = name;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

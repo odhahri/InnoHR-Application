@@ -1,7 +1,12 @@
 package com.innovhr.innovhrapp;
 
+import com.innovhr.innovhrapp.daos.AdminhrDAO;
+import com.innovhr.innovhrapp.daos.EmployeeDAO;
 import com.innovhr.innovhrapp.daos.UserDAO;
+import com.innovhr.innovhrapp.models.Adminhr;
+import com.innovhr.innovhrapp.models.Employee;
 import com.innovhr.innovhrapp.models.User;
+import com.innovhr.innovhrapp.utils.component.AlertUtils;
 import com.innovhr.innovhrapp.utils.component.FXMLViewLoader;
 import com.innovhr.innovhrapp.utils.database.BDConnectivity;
 import javafx.application.Application;
@@ -23,11 +28,30 @@ public class InnovhrApplication extends Application {
     public static void main(String[] args) {
         BDConnectivity.makeSessionFactory();
         launch();
-//        User AdminUser = new User();
-//        AdminUser.setUsername("Oussama admin");
-//        AdminUser.setPersonId(1);
-//        AdminUser.setAccessLevel(User.AccessLevel.ADMIN);
-//        AdminUser.setPassword("root");
-//        UserDAO.saveUser(AdminUser);
+        String adminUsername = "root";
+        try{
+
+            Employee employee = new Employee();
+            employee.setEmp_username(adminUsername);
+
+            EmployeeDAO.saveEmployee(employee);
+            employee = EmployeeDAO.findEmployeeByUsername(employee.getEmp_username());
+
+            User AdminUser = new User();
+            // Saving a user admin
+            AdminUser.setUsername(adminUsername);
+            AdminUser.setEmployee(employee);
+            AdminUser.setAccessLevel(User.AccessLevel.ADMIN);
+            AdminUser.setPassword(adminUsername);
+            UserDAO.saveUser(AdminUser);
+            Adminhr admin = new Adminhr();
+            admin.setEmployee(employee);
+            admin.setName(employee.getEmp_username());
+            AdminhrDAO.saveAdminhr(admin);
+
+        }catch (Exception e){
+            AlertUtils.showAlertError("Error",e.getMessage());
+        }
+
     }
 }

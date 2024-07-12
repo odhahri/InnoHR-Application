@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
@@ -79,6 +80,9 @@ public class FXMLViewLoader {
 
     }
     public static void closeScene(VBox SceneBox){
+        SceneBox.getScene().getWindow().hide();
+    }
+    public static void closeScene(HBox SceneBox){
         SceneBox.getScene().getWindow().hide();
     }
 

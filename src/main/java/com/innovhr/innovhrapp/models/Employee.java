@@ -10,16 +10,16 @@ public class Employee {
     private int emp_id;
     @Column(nullable = true)
     private String emp_phone;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String emp_email;
-    @Column(nullable = false)
+    @Column(unique = true ,nullable = true)
     private String emp_address;
     @Column(nullable = true)
     @Lob
     private byte[] emp_image;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String emp_fname;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String emp_lname;
     @Column(unique = true, nullable = false)
     private String emp_username;
@@ -31,7 +31,7 @@ public class Employee {
     private Manager manager;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id", nullable = true)
     private Department department;
 
     @ManyToOne

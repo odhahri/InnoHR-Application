@@ -2,7 +2,23 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="800.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.collabhr.MyTeamPlanController">
-
-</VBox>
+<ScrollPane style="-fx-background-color:transparent;" fitToHeight="true" fitToWidth="true" prefHeight="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.collabhr.MyTeamPlanController">
+    <content>
+        <VBox fillWidth="false" prefWidth="1000.0" spacing="20.0" VBox.vgrow="ALWAYS">
+            <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Team Plan Page" />
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="prevMonthButton" text="Previous Month"/>
+                <Label fx:id="monthYearLabel" style="-fx-font-size: 18px;"/>
+                <Button fx:id="nextMonthButton" text="Next Month"/>
+            </HBox>
+            <GridPane fx:id="calendarGrid" hgap="10" vgap="10">
+                <!-- Calendar grid will be populated dynamically -->
+            </GridPane>
+            <VBox fx:id="holidayInfoBox" spacing="10">
+                <!-- Usernames and holidays will be displayed here -->
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

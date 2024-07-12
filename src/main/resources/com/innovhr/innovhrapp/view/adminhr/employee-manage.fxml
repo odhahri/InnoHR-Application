@@ -1,123 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="800.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.EmployeeManageController">
-    <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Employee Management" />
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="650.0" style="-fx-background-color:transparent;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.innovhr.innovhrapp.controllers.adminhr.EmployeeManageController">
+    <content>
+        <VBox fillWidth="false" prefWidth="1000.0" spacing="20.0" VBox.vgrow="ALWAYS">
+            <Label fx:id="pageTitle" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Employee Management Page" />
 
-    <HBox spacing="10">
-        <TextField fx:id="searchField" prefWidth="200.0" promptText="Search by username" />
-        <Button fx:id="searchButton" text="Search" />
-        <Button fx:id="hireButton" text="Hire an employee" />
-    </HBox>
-
-    <GridPane hgap="10" vgap="10">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" />
-            <ColumnConstraints />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints vgrow="NEVER" />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-        </rowConstraints>
-
-        <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <TextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-        <Label text="First Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <TextField fx:id="fnameField" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-        <Label text="Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <TextField fx:id="lnameField" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-        <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <TextField fx:id="addressField" promptText="Address" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-
-        <Label text="Manager:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <ComboBox fx:id="managerComboBox" promptText="Manager" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-
-        <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-        <ComboBox fx:id="departmentComboBox" promptText="Department" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-
-        <Label text="Team:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-        <ComboBox fx:id="teamComboBox" promptText="Team" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-
-        <Label text="Documents:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
-        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="8">
-            <TableView fx:id="documentsTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="300.0">
-                <columns>
-                    <TableColumn text="ID">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="doc_id" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Label">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="doc_label" />
-                        </cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
             <HBox spacing="10">
-                <Button fx:id="addDocumentButton" text="Add" />
-                <Button fx:id="deleteDocumentButton" text="Delete" />
+                <TextField fx:id="searchField" prefWidth="200.0" promptText="Search by username" />
+                <Button fx:id="searchButton" text="Search" />
+                <Button fx:id="hireButton" text="Hire an employee" />
             </HBox>
+
+            <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+               <ColumnConstraints />
+               <ColumnConstraints maxWidth="210.33333333333331" minWidth="30.33336385091144" prefWidth="44.33336385091144" />
+               <ColumnConstraints maxWidth="284.9999694824219" minWidth="105.0" prefWidth="270.9999694824219" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                    <RowConstraints vgrow="NEVER" />
+                </rowConstraints>
+
+                <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label text="First Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <TextField fx:id="fnameField" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="lnameField" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <TextField fx:id="addressField" promptText="Address" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                <Label text="Manager:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                <ComboBox fx:id="managerComboBox" promptText="Manager" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                <ComboBox fx:id="departmentComboBox" promptText="Department" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+                <Label text="Team:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                <ComboBox fx:id="teamComboBox" promptText="Team" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+                <Label text="Documents:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                    <TableView fx:id="documentsTable" minHeight="150.0" prefHeight="183.0" prefWidth="300.0">
+                        <columns>
+                            <TableColumn text="ID">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="doc_id" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Label">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="doc_label" />
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                    <HBox spacing="10">
+                        <Button fx:id="addDocumentButton" text="Add" />
+                        <Button fx:id="deleteDocumentButton" text="Delete" />
+                    </HBox>
+                </VBox>
+
+                <Label text="Trainings:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="9">
+                    <TableView fx:id="trainingTable" minHeight="150.0" prefHeight="183.0" prefWidth="300.0">
+                        <columns>
+                            <TableColumn text="Label">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="train_label" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn text="Chapters">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="train_chapters" />
+                                </cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                    <HBox spacing="10">
+                        <Button fx:id="addTrainingButton" text="Add" />
+                        <Button fx:id="deleteTrainingButton" text="Delete" />
+                    </HBox>
+                </VBox>
+
+                <Label prefHeight="14.0" prefWidth="215.0" text="Image:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <VBox prefHeight="179.0" prefWidth="240.0" spacing="5" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                    <ImageView fx:id="imageView" fitHeight="148.0" fitWidth="169.0">
+                        <image>
+                            <Image url="@../../../../../hrimageback.jpg" />
+                        </image>
+                    </ImageView>
+                    <Button onAction="#importImage" text="Import Image" />
+                </VBox>
+
+                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="11">
+                    <Button fx:id="dischargeButton" text="Discharge" />
+                    <Button fx:id="saveButton" text="Save" />
+                </HBox>
+
+                <TextField fx:id="empIdField" promptText="Employee ID" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            </GridPane>
         </VBox>
-
-        <Label text="Trainings:" GridPane.columnIndex="0" GridPane.rowIndex="9" />
-        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="9">
-            <TableView fx:id="trainingTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="300.0">
-                <columns>
-                    <TableColumn text="Label">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="train_label" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn text="Chapters">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="train_chapters" />
-                        </cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
-            <HBox spacing="10">
-                <Button fx:id="addTrainingButton" text="Add" />
-                <Button fx:id="deleteTrainingButton" text="Delete" />
-            </HBox>
-        </VBox>
-
-        <Label text="Image:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="10">
-            <ImageView fx:id="imageView" fitHeight="100.0" fitWidth="100.0">
-                <image>
-                    <Image url="@../../../../../hrimageback.jpg" />
-                </image>
-            </ImageView>
-            <Button onAction="#importImage" text="Import Image" />
-        </VBox>
-
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="11">
-            <Button fx:id="dischargeButton" text="Discharge" />
-            <Button fx:id="saveButton" text="Save" />
-        </HBox>
-
-        <TextField fx:id="empIdField" promptText="Employee ID" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-    </GridPane>
-</VBox>
+    </content>
+   <padding>
+      <Insets left="20.0" />
+   </padding>
+</ScrollPane>

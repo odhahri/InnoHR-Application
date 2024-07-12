@@ -6,17 +6,11 @@ import com.innovhr.innovhrapp.utils.navigation.AccessControlled;
 import com.innovhr.innovhrapp.utils.navigation.UserNavigationHandler;
 import com.innovhr.innovhrapp.utils.usermanagment.SessionManager;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -74,7 +68,7 @@ public class MyInfosController implements AccessControlled {
     @FXML
     private ImageView imageView;
     private byte[] imageBytes;
-    private final String pageName = "Employee management";
+    private final String pageName = "Employee informations";
     private final User.AccessLevel ControllerAccessLevel = User.AccessLevel.COLLAB;
     private final UserNavigationHandler navigationHandler;
 
@@ -121,8 +115,8 @@ public class MyInfosController implements AccessControlled {
         searchEmployee();
         saveButton.setOnAction(event -> saveEmployee());
         // Populate department and team combo boxes
-        populateComboBoxes();
-        setFieldsDisabled(true);
+
+//        setFieldsDisabled(true);
     }
 
     private void setFieldsDisabled(boolean disabled) {
@@ -136,10 +130,14 @@ public class MyInfosController implements AccessControlled {
 
     private void searchEmployee() {
 
-        Employee employee = EmployeeDAO.findEmployeeByUsername(EmployeeDAO.findEmployeeById(SessionManager.getInstance().getLoggedInUser().getPersonId()).getEmp_username());
+        Employee employee = EmployeeDAO.findEmployeeByUsername(EmployeeDAO.findEmployeeById(SessionManager.getInstance().getLoggedInUser().getEmployee().getEmp_id()).getEmp_username());
         if (employee != null) {
             populateEmployeeData(employee);
-            setFieldsDisabled(false);
+            if (AdminhrDAO.findAdminhrByEmployee(employee) != null){
+                setFieldsDisabled(false);
+            }else{
+                setFieldsDisabled(true);
+            }
         } else {
             showAlert("Employee not found", "No employee found ");
             setFieldsDisabled(true);
@@ -182,10 +180,7 @@ public class MyInfosController implements AccessControlled {
 
             Employee employee;
 
-            if (empIdField.getText().isEmpty()) {
-                // New employee
-                employee = new Employee();
-            } else {
+
                 // Existing employee
                 int employeeId = Integer.parseInt(empIdField.getText());
                 employee = EmployeeDAO.findEmployeeById(employeeId);
@@ -193,24 +188,13 @@ public class MyInfosController implements AccessControlled {
                     showAlert("Error", "Employee not found.");
                     return;
                 }
-            }
-            // Extract IDs from ComboBox values
-            if (managerString!=null){
-                int managerId = Integer.parseInt(managerString.split(" \\| ")[0]);
-                Manager manager = ManagerDAO.findManagerById(managerId);
-                employee.setManager(manager);
-            }
-            if (teamString!=null){
-                int teamId = Integer.parseInt(teamString.split(" \\| ")[0]);
-                Team team = TeamDAO.findTeamById(teamId);
-                employee.setTeam(team);
-            }
+
+
             employee.setEmp_username(username);
             employee.setEmp_fname(firstName);
             employee.setEmp_lname(lastName);
             employee.setEmp_email(email);
             employee.setEmp_address(address);
-            employee.setDepartment(department);
             if (imageBytes != null) {
                 employee.setEmp_image(imageBytes);
             }
@@ -240,8 +224,9 @@ public class MyInfosController implements AccessControlled {
         addressField.setText(employee.getEmp_address());
         if (employee.getManager() != null){
             managerComboBox.setValue(employee.getManager().getId() + " | " + employee.getManager().getName());
+        } if (employee.getDepartment() != null) {
+            departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
         }
-        departmentComboBox.setValue(employee.getDepartment().getDep_id() + " | " + employee.getDepartment().getDep_name());
         if (employee.getTeam() != null) {
             teamComboBox.setValue(employee.getTeam().getTeam_id() + " | " + employee.getTeam().getTeam_label());
         }

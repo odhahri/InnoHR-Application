@@ -39,4 +39,9 @@ public class SessionManager {
             this.dynamicAccessLevel = loggedInUser.getAccessLevel();
         }
     }
+    public void logout() {
+        loggedInUser = null;
+        dynamicAccessLevel=null;
+        instance = null;
+    }
 }
